@@ -1,4 +1,4 @@
-package services
+package user
 
 import (
 	"fmt"
@@ -47,13 +47,16 @@ func (us UserService) Create(user u.IUser) error {
 	user.SetPassword(string(hashedPassword))
 
 	if err := us.userRepository.Create(user); err != nil {
-		return fmt.Errorf("Internal Error trying to create user")
+		return fmt.Errorf("%w: Internal Error trying to create user", e.InternalError)
 	}
 
 	return nil
 }
 
 func (us UserService) UpdatePassword(user u.IUser) error {
+	if user.GetId() == 0 {
+		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
+	}
 	if err := us.validator.Var(user.GetPassword(), "required,min=8,max=200"); err != nil {
 		return fmt.Errorf("%w: %s", e.BadRequestError, err.Error())
 	}
@@ -66,7 +69,7 @@ func (us UserService) UpdatePassword(user u.IUser) error {
 	user.SetPassword(string(hashedPassword))
 
 	if err := us.userRepository.Update(user); err != nil {
-		return fmt.Errorf("Internal Error trying to update the password")
+		return fmt.Errorf("%w: Internal Error trying to update the password", e.InternalError)
 	}
 
 	return nil
