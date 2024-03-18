@@ -112,7 +112,6 @@ func TestUpdatePassword(t *testing.T) {
 		user        u.User
 		oldPassword string
 		err         bool
-		isSame      bool
 	}{
 		{
 			name: "PassNewPassword",
@@ -168,7 +167,6 @@ func TestUpdatePassword(t *testing.T) {
 			},
 			oldPassword: "$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW",
 			err:         false,
-			isSame:      true,
 		},
 	}
 
@@ -189,7 +187,8 @@ func TestUpdatePassword(t *testing.T) {
 				if tt.user.GetPassword() == "" {
 					t.Fatalf("%s: Password change is invalid", tt.user.GetPassword())
 				}
-				if !tt.isSame && tt.user.GetPassword() == tt.oldPassword {
+
+				if tt.user.GetPassword() == tt.oldPassword {
 					t.Fatalf("%s: Password did not changed", tt.user.GetPassword())
 				}
 			}
