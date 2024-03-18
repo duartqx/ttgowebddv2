@@ -22,10 +22,17 @@ func GetSessionService(sessionRepository a.ISessionRepository) *SessionService {
 }
 
 func (ss SessionService) GetSessionUser(ctx context.Context) a.ISessionUser {
-	user, ok := ctx.Value("user").(*a.SessionUser)
+	contextUser := ctx.Value("user")
+
+	if contextUser == nil {
+		return nil
+	}
+
+	user, ok := contextUser.(*a.SessionUser)
 	if !ok {
 		return nil
 	}
+
 	session, _ := ss.sessionRepository.Get(user)
 	return session.GetUser()
 }
