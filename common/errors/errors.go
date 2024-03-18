@@ -3,6 +3,10 @@ package errors
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 var (
@@ -13,18 +17,38 @@ var (
 	Unauthorized    = errors.New("Unauthorized")
 )
 
-type ValidationError struct {
-	Message string
+type validationError struct {
+	Tag   string
+	Value interface{}
 }
 
-func (e *ValidationError) Error() string {
-	return e.Message
+type ValidationErrors struct {
+	Errs error
 }
 
-func (e ValidationError) Decode() *map[string]interface{} {
-	var res map[string]interface{}
-	if err := json.Unmarshal([]byte(e.Message), &res); err != nil {
-		return nil
+func (ves ValidationErrors) Error() string {
+	errStr := ""
+	for tag, value := range *ves.Decode() {
+		errStr += fmt.Sprintf("%v: %v ", tag, value)
 	}
+	return errStr
+}
+
+func (ves ValidationErrors) Decode() *map[string]validationError {
+
+	validationErrors := map[string]validationError{}
+
+	for _, err := range ves.Errs.(validator.ValidationErrors) {
+		validationErrors[strings.ToLower(err.Field())] = validationError{
+			Tag:   err.Tag(),
+			Value: err.Value(),
+		}
+	}
+
+	return &validationErrors
+}
+
+func (ves ValidationErrors) DecodeJSON() *[]byte {
+	res, _ := json.Marshal(ves.Decode())
 	return &res
 }

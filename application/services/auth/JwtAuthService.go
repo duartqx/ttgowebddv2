@@ -76,7 +76,9 @@ func (jas JwtAuthService) ValidateAuth(
 
 	parsedToken, err := jwt.ParseWithClaims(unparsedToken, claims, jas.keyFunc)
 	if err != nil || !parsedToken.Valid {
-		go jas.sessionRepository.Delete(claims.ISessionUser)
+		if jas.sessionRepository != nil {
+			go jas.sessionRepository.Delete(claims.ISessionUser)
+		}
 		return nil, fmt.Errorf("%w: Expired session", e.Unauthorized)
 	}
 
@@ -115,7 +117,9 @@ func (jas JwtAuthService) Login(user u.IUser) (token string, expiresAt time.Time
 		return "", expiresAt, fmt.Errorf("%w: Could not generate token", e.InternalError)
 	}
 
-	jas.sessionRepository.Set(claimsUser, createdAt)
+	if jas.sessionRepository != nil {
+		jas.sessionRepository.Set(claimsUser, createdAt)
+	}
 
 	return token, expiresAt, nil
 }
@@ -129,7 +133,9 @@ func (jas JwtAuthService) Logout(authorization string, cookie *http.Cookie) erro
 	claims := a.GetNewClaims()
 
 	if _, err := jwt.ParseWithClaims(unparsedToken, claims, jas.keyFunc); err == nil {
-		go jas.sessionRepository.Delete(claims.ISessionUser)
+		if jas.sessionRepository != nil {
+			go jas.sessionRepository.Delete(claims.ISessionUser)
+		}
 	}
 
 	return nil

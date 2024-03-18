@@ -8,12 +8,13 @@ import (
 )
 
 func ErrorResponse(w http.ResponseWriter, err error) {
-	var valError *e.ValidationError
+	var valError *e.ValidationErrors
 	switch {
 	case errors.As(err, &valError):
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		// w.Header().Set("Content-Type", "application/json")
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		// w.WriteHeader(http.StatusBadRequest)
+		// w.Write(valError.Error())
 	case errors.Is(err, e.NotFoundError):
 		http.Error(w, err.Error(), http.StatusNotFound)
 	case errors.Is(err, e.BadRequestError):

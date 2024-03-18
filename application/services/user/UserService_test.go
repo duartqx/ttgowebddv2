@@ -53,6 +53,8 @@ func TestCreate(t *testing.T) {
 
 			err := userService.Create(&tt.user)
 
+			t.Logf("Create Error: %v", err)
+
 			if tt.err && err == nil {
 				t.Fatalf("Expected an error, got nil")
 			} else if !tt.err && err != nil {
@@ -84,6 +86,8 @@ func TestFindById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			user, err := userService.FindById(tt.id)
+
+			t.Logf("FindById Error: %v", err)
 
 			if tt.err && err == nil {
 				t.Fatalf("Expected an error with id == %d, got nil", tt.id)
@@ -172,6 +176,8 @@ func TestUpdatePassword(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			err := userService.UpdatePassword(&tt.user)
+
+			t.Logf("UpdatePassword Error: %v", err)
 
 			if tt.err && err == nil {
 				t.Fatalf("%s: Expected an error, got nil", err.Error())
