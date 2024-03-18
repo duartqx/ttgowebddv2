@@ -9,6 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 
+	e "github.com/duartqx/ddgobase/common/errors"
 	a "github.com/duartqx/ddgobase/domains/auth"
 	u "github.com/duartqx/ddgobase/domains/user"
 )
@@ -68,7 +69,7 @@ func (jas JwtAuthService) ValidateAuth(
 
 	unparsedToken := jas.getUnparsedToken(authorization, cookie)
 	if unparsedToken == "" {
-		return nil, fmt.Errorf("Missing Token")
+		return nil, fmt.Errorf("%w: Missing Token", e.Unauthorized)
 	}
 
 	claims := a.GetNewClaims()
@@ -76,7 +77,7 @@ func (jas JwtAuthService) ValidateAuth(
 	parsedToken, err := jwt.ParseWithClaims(unparsedToken, claims, jas.keyFunc)
 	if err != nil || !parsedToken.Valid {
 		go jas.sessionRepository.Delete(claims.ISessionUser)
-		return nil, fmt.Errorf("Expired session")
+		return nil, fmt.Errorf("%w: Expired session", e.Unauthorized)
 	}
 
 	return claims.ISessionUser, nil
@@ -85,18 +86,18 @@ func (jas JwtAuthService) ValidateAuth(
 func (jas JwtAuthService) Login(user u.IUser) (token string, expiresAt time.Time, err error) {
 
 	if user.GetEmail() == "" || user.GetPassword() == "" {
-		return token, expiresAt, fmt.Errorf("Invalid Email or Password")
+		return token, expiresAt, fmt.Errorf("%w: Invalid Email or Password", e.BadRequestError)
 	}
 
 	dbUser, err := jas.userRepository.FindByEmail(user.GetEmail())
 	if err != nil {
-		return token, expiresAt, fmt.Errorf("Invalid Email")
+		return token, expiresAt, fmt.Errorf("%w: Invalid Email", e.Unauthorized)
 	}
 
 	if err := bcrypt.CompareHashAndPassword(
 		[]byte(dbUser.GetPassword()), []byte(user.GetPassword()),
 	); err != nil {
-		return token, expiresAt, fmt.Errorf("Invalid Password")
+		return token, expiresAt, fmt.Errorf("%w: Invalid Password", e.BadRequestError)
 	}
 
 	createdAt := time.Now()
@@ -111,7 +112,7 @@ func (jas JwtAuthService) Login(user u.IUser) (token string, expiresAt time.Time
 
 	token, err = jas.generateToken(claimsUser, expiresAt)
 	if err != nil {
-		return "", expiresAt, fmt.Errorf("Could not generate token")
+		return "", expiresAt, fmt.Errorf("%w: Could not generate token", e.InternalError)
 	}
 
 	jas.sessionRepository.Set(claimsUser, createdAt)
@@ -122,7 +123,7 @@ func (jas JwtAuthService) Login(user u.IUser) (token string, expiresAt time.Time
 func (jas JwtAuthService) Logout(authorization string, cookie *http.Cookie) error {
 	unparsedToken := jas.getUnparsedToken(authorization, cookie)
 	if unparsedToken == "" {
-		return fmt.Errorf("Missing Token")
+		return fmt.Errorf("%w: Missing Token", e.Unauthorized)
 	}
 
 	claims := a.GetNewClaims()

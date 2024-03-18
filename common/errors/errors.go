@@ -10,6 +10,7 @@ var (
 	ForbiddenError  = errors.New("Forbidden")
 	InternalError   = errors.New("Internal")
 	NotFoundError   = errors.New("Not Found")
+	Unauthorized    = errors.New("Unauthorized")
 )
 
 type ValidationError struct {

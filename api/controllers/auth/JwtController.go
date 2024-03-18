@@ -41,7 +41,7 @@ func (jc JwtController) Login(w http.ResponseWriter, r *http.Request) {
 	token, expiresAt, err := jc.jwtService.Login(user)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		h.ErrorResponse(w, err)
 		return
 	}
 
@@ -59,8 +59,7 @@ func (jc JwtController) Login(w http.ResponseWriter, r *http.Request) {
 		ExpiresAt: expiresAt,
 		Status:    true,
 	}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		h.ErrorResponse(w, err)
 	}
 }
 
@@ -85,7 +84,7 @@ func (jc JwtController) AuthenticatedMiddleware(next http.Handler) http.Handler 
 
 		if err != nil {
 			http.SetCookie(w, h.GetInvalidCookie())
-			w.WriteHeader(http.StatusUnauthorized)
+			h.ErrorResponse(w, err)
 			return
 		}
 
