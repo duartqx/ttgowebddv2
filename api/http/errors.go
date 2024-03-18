@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	e "ddgodeliv/common/errors"
+	e "github.com/duartqx/ddgobase/common/errors"
 )
 
 func ErrorResponse(w http.ResponseWriter, err error) {

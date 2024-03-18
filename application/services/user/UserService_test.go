@@ -54,13 +54,13 @@ func TestCreate(t *testing.T) {
 			err := userService.Create(&tt.user)
 
 			if tt.err && err == nil {
-				t.Errorf("Expected an error, got nil")
+				t.Fatalf("Expected an error, got nil")
 			} else if !tt.err && err != nil {
-				t.Errorf("%s: Expected nil, got an error", err.Error())
+				t.Fatalf("%s: Expected nil, got an error", err.Error())
 			}
 
 			if err == nil && tt.user.GetId() == 0 {
-				t.Errorf("Expected user id to update")
+				t.Fatalf("Expected user id to update")
 			}
 		})
 	}
@@ -86,13 +86,13 @@ func TestFindById(t *testing.T) {
 			user, err := userService.FindById(tt.id)
 
 			if tt.err && err == nil {
-				t.Errorf("Expected an error with id == %d, got nil", tt.id)
+				t.Fatalf("Expected an error with id == %d, got nil", tt.id)
 			} else if !tt.err && err != nil {
-				t.Errorf("%s: Expected no error with id == %d, got error", err.Error(), tt.id)
+				t.Fatalf("%s: Expected no error with id == %d, got error", err.Error(), tt.id)
 			}
 
 			if err == nil && user.GetId() != tt.id {
-				t.Errorf(
+				t.Fatalf(
 					"Expected user id to match the one on test case, got %d, expected %d",
 					user.GetId(),
 					tt.id,
@@ -174,17 +174,17 @@ func TestUpdatePassword(t *testing.T) {
 			err := userService.UpdatePassword(&tt.user)
 
 			if tt.err && err == nil {
-				t.Errorf("%s: Expected an error, got nil", err.Error())
+				t.Fatalf("%s: Expected an error, got nil", err.Error())
 			} else if !tt.err && err != nil {
-				t.Errorf("%s: Expected nil, got error", err.Error())
+				t.Fatalf("%s: Expected nil, got error", err.Error())
 			}
 
 			if err == nil {
 				if tt.user.GetPassword() == "" {
-					t.Errorf("%s: Password change is invalid", tt.user.GetPassword())
+					t.Fatalf("%s: Password change is invalid", tt.user.GetPassword())
 				}
 				if !tt.isSame && tt.user.GetPassword() == tt.oldPassword {
-					t.Errorf("%s: Password did not changed", tt.user.GetPassword())
+					t.Fatalf("%s: Password did not changed", tt.user.GetPassword())
 				}
 			}
 		})
