@@ -5,10 +5,10 @@ import (
 
 	s "github.com/duartqx/ddgobase/application/services/user"
 	u "github.com/duartqx/ddgobase/domains/user"
-	r "github.com/duartqx/ddgobase/infrastructure/repository"
+	m "github.com/duartqx/ddgobase/infrastructure/repository/mock"
 )
 
-var userService u.IUserService = s.GetUserService(r.GetMockUserRepository())
+var userService u.IUserService = s.GetUserService(m.GetMockUserRepository())
 
 func TestCreate(t *testing.T) {
 	tests := []struct {

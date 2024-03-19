@@ -9,12 +9,13 @@ import (
 	j "github.com/duartqx/ddgobase/application/services/auth"
 	u "github.com/duartqx/ddgobase/domains/user"
 	r "github.com/duartqx/ddgobase/infrastructure/repository"
+	m "github.com/duartqx/ddgobase/infrastructure/repository/mock"
 )
 
 var (
 	secret            = []byte("secret")
 	sessionRepository = r.GetSessionRepository()
-	userRepository    = r.GetMockUserRepository()
+	userRepository    = m.GetMockUserRepository()
 	jwtAuthService    = j.GetJwtAuthService(
 		userRepository, sessionRepository, &secret,
 	)

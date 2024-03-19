@@ -1,4 +1,4 @@
-package repository
+package mock
 
 import (
 	"cmp"
@@ -68,13 +68,14 @@ func (mur MockUserRepository) FindById(user u.IUser) error {
 	return fmt.Errorf("%w: User not found", errors.NotFoundError)
 }
 
-func (mur MockUserRepository) FindByEmail(email string) (u.IUser, error) {
-	for _, user := range users {
-		if user.GetEmail() == email {
-			return user, nil
+func (mur MockUserRepository) FindByEmail(user u.IUser) error {
+	for _, dbUser := range users {
+		if dbUser.GetEmail() == user.GetEmail() {
+			user.SetPassword(dbUser.GetPassword()).SetName(dbUser.GetName())
+			return nil
 		}
 	}
-	return nil, fmt.Errorf("%w: User not found", errors.NotFoundError)
+	return fmt.Errorf("%w: User not found", errors.NotFoundError)
 }
 
 func (mur MockUserRepository) ExistsByEmail(email string) bool {
