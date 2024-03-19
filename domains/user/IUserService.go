@@ -1,7 +1,7 @@
 package user
 
 type IUserService interface {
-	FindById(id int) (IUser, error)
+	FindById(user IUser) error
 
 	Create(user IUser) error
 	Update(user IUser) error

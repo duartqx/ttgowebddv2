@@ -70,36 +70,41 @@ func TestCreate(t *testing.T) {
 
 func TestFindById(t *testing.T) {
 	tests := []struct {
-		name string
-		id   int
-		err  bool
+		name     string
+		expected int
+		user     u.IUser
+		err      bool
 	}{
-		{name: "PassIdExists1", id: 1, err: false},
-		{name: "PassIdExists2", id: 2, err: false},
-		{name: "PassIdExists3", id: 3, err: false},
-		{name: "FailIdDoesNotExists1", id: 99, err: true},
-		{name: "FailIdDoesNotExists2", id: 999, err: true},
-		{name: "FailIdDoesNotExists3", id: 333, err: true},
+		{name: "PassIdExists1", expected: 1, user: &u.User{Id: 1}, err: false},
+		{name: "PassIdExists2", expected: 2, user: &u.User{Id: 2}, err: false},
+		{name: "PassIdExists3", expected: 3, user: &u.User{Id: 3}, err: false},
+		{name: "FailIdDoesNotExists1", expected: 99, user: &u.User{Id: 99}, err: true},
+		{name: "FailIdDoesNotExists2", expected: 999, user: &u.User{Id: 999}, err: true},
+		{name: "FailIdDoesNotExists3", expected: 333, user: &u.User{Id: 333}, err: true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			user, err := userService.FindById(tt.id)
+			err := userService.FindById(tt.user)
 
 			t.Logf("FindById Error: %v", err)
 
 			if tt.err && err == nil {
-				t.Fatalf("Expected an error with id == %d, got nil", tt.id)
+				t.Fatalf("Expected an error with id == %d, got nil", tt.expected)
 			} else if !tt.err && err != nil {
-				t.Fatalf("%s: Expected no error with id == %d, got error", err.Error(), tt.id)
+				t.Fatalf(
+					"%s: Expected no error with id == %d, got error",
+					err.Error(),
+					tt.expected,
+				)
 			}
 
-			if err == nil && user.GetId() != tt.id {
+			if err == nil && tt.user.GetId() != tt.expected {
 				t.Fatalf(
 					"Expected user id to match the one on test case, got %d, expected %d",
-					user.GetId(),
-					tt.id,
+					tt.user.GetId(),
+					tt.expected,
 				)
 			}
 		})

@@ -29,7 +29,7 @@ func GetUserService(userRepository u.IUserRepository) *UserService {
 
 func (us UserService) Create(user u.IUser) error {
 
-	if us.userRepository.ExistsByEmail(user.GetEmail()) {
+	if user.GetEmail() == "" || us.userRepository.ExistsByEmail(user.GetEmail()) {
 		return fmt.Errorf("%w: Invalid Email", e.BadRequestError)
 	}
 
@@ -86,11 +86,21 @@ func (us UserService) UpdatePassword(user u.IUser) error {
 }
 
 func (us UserService) Update(user u.IUser) error {
+	if user.GetId() == 0 ||
+		user.GetEmail() == "" ||
+		user.GetPassword() == "" ||
+		user.GetName() == "" {
+
+		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
+	}
 	return us.UpdatePassword(user)
 }
 
-func (us UserService) FindById(id int) (u.IUser, error) {
-	return us.userRepository.FindById(id)
+func (us UserService) FindById(user u.IUser) error {
+	if user.GetId() == 0 {
+		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
+	}
+	return us.userRepository.FindById(user)
 }
 
 func (us UserService) Delete(user u.IUser) error {

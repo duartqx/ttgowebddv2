@@ -52,16 +52,20 @@ func GetMockUserRepository() *MockUserRepository {
 	return &MockUserRepository{}
 }
 
-func (mur MockUserRepository) FindById(id int) (u.IUser, error) {
+func (mur MockUserRepository) FindById(user u.IUser) error {
 	userIndex, found := slices.BinarySearchFunc(
-		users, id, func(user u.IUser, id int) int {
-			return cmp.Compare(user.GetId(), id)
+		users, user.GetId(), func(dbUser u.IUser, id int) int {
+			return cmp.Compare(dbUser.GetId(), id)
 		},
 	)
 	if found {
-		return users[userIndex], nil
+		dbUser := users[userIndex]
+		user.SetName(dbUser.GetName()).
+			SetEmail(dbUser.GetEmail()).
+			SetPassword(dbUser.GetPassword())
+		return nil
 	}
-	return nil, fmt.Errorf("%w: User not found", errors.NotFoundError)
+	return fmt.Errorf("%w: User not found", errors.NotFoundError)
 }
 
 func (mur MockUserRepository) FindByEmail(email string) (u.IUser, error) {

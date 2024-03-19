@@ -1,7 +1,7 @@
 package user
 
 type IUserRepository interface {
-	FindById(id int) (IUser, error)
+	FindById(user IUser) error
 
 	FindByEmail(email string) (IUser, error)
 	ExistsByEmail(email string) bool
