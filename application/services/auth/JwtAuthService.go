@@ -91,8 +91,9 @@ func (jas JwtAuthService) Login(user u.IUser) (token string, expiresAt time.Time
 		return token, expiresAt, fmt.Errorf("%w: Invalid Email or Password", e.BadRequestError)
 	}
 
-	dbUser, err := jas.userRepository.FindByEmail(user.GetEmail())
-	if err != nil {
+	dbUser := u.GetNewUser().SetEmail(user.GetEmail())
+
+	if err := jas.userRepository.FindByEmail(dbUser); err != nil {
 		return token, expiresAt, fmt.Errorf("%w: Invalid Email", e.Unauthorized)
 	}
 
