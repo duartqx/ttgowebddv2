@@ -3,6 +3,7 @@ module github.com/duartqx/ddgobase
 go 1.22.1
 
 require (
+	github.com/duartqx/ddgomiddlewares v0.0.0-20240225021135-97a6170431d9 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
