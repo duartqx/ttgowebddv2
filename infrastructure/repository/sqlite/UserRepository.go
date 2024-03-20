@@ -43,12 +43,20 @@ func (ur UserRepository) FindByEmail(user u.IUser) error {
 		Limit(1).
 		Build()
 
-	if err := ur.db.Get(&user, query, args...); err != nil {
+	var dbUser u.User
+
+	if err := ur.db.Get(&dbUser, query, args...); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return e.NotFoundError
 		}
 		return err
 	}
+
+	user.
+		SetId(dbUser.GetId()).
+		SetName(dbUser.GetName()).
+		SetPassword(dbUser.GetPassword())
+
 	return nil
 }
 
