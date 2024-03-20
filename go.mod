@@ -1,4 +1,4 @@
-module github.com/duartqx/ddgobase
+module github.com/duartqx/ttgowebddv2
 
 go 1.22.1
 

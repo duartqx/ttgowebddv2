@@ -1,3 +1,3 @@
-# DDGOBASE
+# TTGOWEBDDV2
 
-Base Domain Driven Authentication Service using Jwt Token
+Base Domain Driven Go + React Task Tracker project
