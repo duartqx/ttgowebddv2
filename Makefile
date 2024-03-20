@@ -1,7 +1,19 @@
+all: dotenv build run
+
+update:
+	go get -u ./...
+
 test:
 	go test ./... | grep -v '?'
 
-ifeq ($(V),1)
-test:
-	go test ./... -v | grep -v '?'
-endif
+vtest:
+	go test -v ./... | grep -v '?'
+
+dotenv:
+	set -a && source ./.env
+
+build:
+	go build -o cmd/main ./...
+
+run:
+	./cmd/main
