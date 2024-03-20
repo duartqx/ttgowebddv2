@@ -13,7 +13,7 @@ dotenv:
 	set -a && source ./.env
 
 build:
-	go build -o cmd/main ./...
+	go build -o ./cmd/main ./cmd
 
 run:
-	./cmd/main
+	./cmd/main || true
