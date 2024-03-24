@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	sqlbuilder "github.com/huandu/go-sqlbuilder"
+	sqlb "github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
 
 	e "github.com/duartqx/ttgowebddv2/common/errors"
@@ -14,17 +14,17 @@ import (
 
 type TaskRepository struct {
 	db *sqlx.DB
-	sb *sqlbuilder.SelectBuilder
+	sb *sqlb.SelectBuilder
 }
 
 func GetTaskRepository(db *sqlx.DB) *TaskRepository {
 	return &TaskRepository{
 		db: db,
-		sb: sqlbuilder.NewSelectBuilder(),
+		sb: sqlb.NewSelectBuilder(),
 	}
 }
 
-func (tr TaskRepository) getJoinedQueryBuilder() *sqlbuilder.SelectBuilder {
+func (tr TaskRepository) getJoinedQueryBuilder() *sqlb.SelectBuilder {
 	return tr.sb.
 		Select(
 			"t.id AS id",
@@ -40,7 +40,7 @@ func (tr TaskRepository) getJoinedQueryBuilder() *sqlbuilder.SelectBuilder {
 			"COALESCE(u.email, '') AS user.email",
 		).
 		From("tasks t").
-		JoinWithOption(sqlbuilder.LeftJoin, "users u", "u.id = t.user_id")
+		JoinWithOption(sqlb.LeftJoin, "users u", "u.id = t.user_id")
 }
 
 func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
@@ -70,15 +70,15 @@ func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 	query, args := sb.Build()
 
 	var tasks []t.Task
-	if err := tr.db.Select(&tasks, query, args...); err != nil {
+	if err := tr.db.Select(tasks, query, args...); err != nil {
 		return nil, err
 	}
 
 	return &tasks, nil
 }
 
-func (tr TaskRepository) Update(task t.ITask) error {
-	ub := sqlbuilder.NewUpdateBuilder()
+func (tr TaskRepository) Update(task *t.Task) error {
+	ub := sqlb.NewUpdateBuilder()
 
 	assignments := []string{
 		ub.Assign("tag", task.GetTag()),
@@ -107,7 +107,7 @@ func (tr TaskRepository) Update(task t.ITask) error {
 	return nil
 }
 
-func (tr TaskRepository) findByWhere(task t.Task, where string) error {
+func (tr TaskRepository) findByWhere(task *t.Task, where string) error {
 
 	query, args := tr.sb.Where(where).Build()
 
@@ -121,15 +121,15 @@ func (tr TaskRepository) findByWhere(task t.Task, where string) error {
 	return nil
 }
 
-func (tr TaskRepository) FindById(task t.Task) error {
+func (tr TaskRepository) FindById(task *t.Task) error {
 	return tr.findByWhere(task, tr.sb.Equal("t.id", task.GetId()))
 }
 
-func (tr TaskRepository) FindByTag(task t.Task) error {
+func (tr TaskRepository) FindByTag(task *t.Task) error {
 	return tr.findByWhere(task, tr.sb.Equal("t.tag", task.GetTag()))
 }
 
-func (tr TaskRepository) Create(task t.Task) error {
+func (tr TaskRepository) Create(task *t.Task) error {
 
 	args := []interface{}{
 		task.GetTag(),
@@ -159,7 +159,7 @@ func (tr TaskRepository) Create(task t.Task) error {
 		COMMIT;
 	`
 
-	if err := tr.db.Get(&task, query, args...); err != nil {
+	if err := tr.db.Get(task, query, args...); err != nil {
 		return err
 	}
 
