@@ -1,4 +1,4 @@
-all: dotenv build run
+all: build run
 
 update:
 	go get -u ./...

@@ -20,7 +20,7 @@ type ITask interface {
 	SetDescription(description string) ITask
 
 	GetCompleted() bool
-	SetCompleted() ITask
+	SetCompleted(completed bool) ITask
 
 	GetStartAt() *time.Time
 	SetStartAt(startAt *time.Time) ITask

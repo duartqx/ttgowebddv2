@@ -19,6 +19,10 @@ type Task struct {
 	User   *u.User `json:"user" db:"user"`
 }
 
+func GetNewTask() *Task {
+	return &Task{User: u.GetNewUser()}
+}
+
 func (t Task) GetId() int {
 	return t.Id
 }
@@ -59,8 +63,8 @@ func (t Task) GetCompleted() bool {
 	return t.Completed
 }
 
-func (t *Task) SetCompleted() ITask {
-	t.Completed = !t.Completed
+func (t *Task) SetCompleted(completed bool) ITask {
+	t.Completed = completed
 	return t
 }
 

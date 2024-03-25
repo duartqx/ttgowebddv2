@@ -41,8 +41,8 @@ func GetServer(db *sqlx.DB, secret string) http.Handler {
 			Cors:              true,
 			UserRepository:    getUserRepository(db),
 			SessionRepository: repository.GetSessionRepository(),
+			TaskRepository:    getTaskRepository(db),
 		}).
-		BaseUserRoutes().
 		Build()
 }
 

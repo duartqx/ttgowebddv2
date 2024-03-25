@@ -17,4 +17,7 @@ type ITaskFilter interface {
 
 	GetEndAt() time.Time
 	SetEndAt(endAt time.Time) ITaskFilter
+
+	GetUserId() int
+	SetUserId(id int) ITaskFilter
 }

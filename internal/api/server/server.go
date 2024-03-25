@@ -7,12 +7,15 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	ac "github.com/duartqx/ddgobase/internal/api/controllers/auth"
-	uc "github.com/duartqx/ddgobase/internal/api/controllers/user"
-	as "github.com/duartqx/ddgobase/internal/application/services/auth"
-	us "github.com/duartqx/ddgobase/internal/application/services/user"
-	a "github.com/duartqx/ddgobase/internal/domains/auth"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	ac "github.com/duartqx/ttgowebddv2/api/controllers/auth"
+	tc "github.com/duartqx/ttgowebddv2/api/controllers/task"
+	uc "github.com/duartqx/ttgowebddv2/api/controllers/user"
+	as "github.com/duartqx/ttgowebddv2/application/services/auth"
+	ts "github.com/duartqx/ttgowebddv2/application/services/task"
+	us "github.com/duartqx/ttgowebddv2/application/services/user"
+	a "github.com/duartqx/ttgowebddv2/domains/auth"
+	t "github.com/duartqx/ttgowebddv2/domains/task"
+	u "github.com/duartqx/ttgowebddv2/domains/user"
 
 	cm "github.com/duartqx/ddgomiddlewares/cors"
 	lm "github.com/duartqx/ddgomiddlewares/logger"
@@ -26,6 +29,7 @@ type ServerConfig struct {
 
 	UserRepository    u.IUserRepository
 	SessionRepository a.ISessionRepository
+	TaskRepository    t.ITaskRepository
 }
 
 type server struct {
@@ -37,6 +41,7 @@ type server struct {
 
 	userRepository    u.IUserRepository
 	sessionRepository a.ISessionRepository
+	taskRepository    t.ITaskRepository
 
 	jwtController *ac.JwtController
 }
@@ -56,12 +61,13 @@ func NewServer(config *ServerConfig) *server {
 
 		userRepository:    config.UserRepository,
 		sessionRepository: config.SessionRepository,
+		taskRepository:    config.TaskRepository,
 
 		jwtController: jwtController,
 	}
 }
 
-func (s *server) BaseUserRoutes() *server {
+func (s *server) AddBaseUserRoutes() *server {
 
 	userController := uc.GetUserController(
 		us.GetUserService(s.userRepository),
@@ -110,6 +116,40 @@ func (s *server) BaseUserRoutes() *server {
 	return s
 }
 
+func (s *server) AddTaskRoutes() *server {
+	taskController := tc.GetTaskController(
+		ts.GetTaskService(s.taskRepository),
+		as.GetSessionService(s.sessionRepository),
+	)
+
+	taskMux := http.NewServeMux()
+
+	taskMux.Handle(
+		"POST /{$}",
+		s.jwtController.AuthenticatedMiddleware(
+			http.HandlerFunc(taskController.Create),
+		),
+	)
+
+	taskMux.Handle(
+		"PATCH /{id}/{$}",
+		s.jwtController.AuthenticatedMiddleware(
+			http.HandlerFunc(taskController.Update),
+		),
+	)
+
+	taskMux.Handle(
+		"POST /filter/{$}",
+		s.jwtController.AuthenticatedMiddleware(
+			http.HandlerFunc(taskController.Filter),
+		),
+	)
+
+	s.AddGroup("/api/tasks/", taskMux)
+
+	return s
+}
+
 func (s server) Use(
 	mux http.Handler, middlewares ...func(http.Handler) http.Handler,
 ) http.Handler {
@@ -132,7 +172,9 @@ func (s *server) AddGroup(pattern string, handler http.Handler) error {
 	return nil
 }
 
-func (s server) Build() http.Handler {
+func (s *server) Build() http.Handler {
+
+	s.AddBaseUserRoutes().AddTaskRoutes()
 
 	mux := http.Handler(s.mux)
 

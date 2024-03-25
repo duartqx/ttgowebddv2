@@ -1,6 +1,8 @@
 package task
 
-import "time"
+import (
+	"time"
+)
 
 type completedStatus struct {
 	Ignored     int
@@ -20,6 +22,7 @@ type TaskFilter struct {
 	Sprints   []int     `json:"sprints"`
 	StartAt   time.Time `json:"start_at"`
 	EndAt     time.Time `json:"end_at"`
+	UserId    int       `json:"-"`
 }
 
 func GetTaskFilter() *TaskFilter {
@@ -74,5 +77,14 @@ func (tf TaskFilter) GetEndAt() time.Time {
 
 func (tf *TaskFilter) SetEndAt(endAt time.Time) ITaskFilter {
 	tf.EndAt = endAt
+	return tf
+}
+
+func (tf TaskFilter) GetUserId() int {
+	return tf.UserId
+}
+
+func (tf *TaskFilter) SetUserId(id int) ITaskFilter {
+	tf.UserId = id
 	return tf
 }

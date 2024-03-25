@@ -22,3 +22,7 @@ func initDB(conn string) *sqlx.DB {
 func getUserRepository(db *sqlx.DB) *sqlite.UserRepository {
 	return sqlite.GetUserRepository(db)
 }
+
+func getTaskRepository(db *sqlx.DB) *sqlite.TaskRepository {
+	return sqlite.GetTaskRepository(db)
+}
