@@ -15,7 +15,7 @@ func (u User) GetId() int {
 	return u.Id
 }
 
-func (u *User) SetId(id int) IUser {
+func (u *User) SetId(id int) *User {
 	u.Id = id
 	return u
 }
@@ -24,7 +24,7 @@ func (u User) GetName() string {
 	return u.Name
 }
 
-func (u *User) SetName(name string) IUser {
+func (u *User) SetName(name string) *User {
 	u.Name = name
 	return u
 }
@@ -33,7 +33,7 @@ func (u User) GetPassword() string {
 	return u.Password
 }
 
-func (u *User) SetPassword(password string) IUser {
+func (u *User) SetPassword(password string) *User {
 	u.Password = password
 	return u
 }
@@ -42,7 +42,7 @@ func (u User) GetEmail() string {
 	return u.Email
 }
 
-func (u *User) SetEmail(email string) IUser {
+func (u *User) SetEmail(email string) *User {
 	u.Email = email
 	return u
 }

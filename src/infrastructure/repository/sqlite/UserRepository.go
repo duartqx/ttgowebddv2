@@ -3,6 +3,7 @@ package sqlite
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
@@ -19,7 +20,7 @@ func GetUserRepository(db *sqlx.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (ur UserRepository) FindById(user u.IUser) error {
+func (ur UserRepository) FindById(user *u.User) error {
 	sb := sqlbuilder.NewSelectBuilder()
 
 	query, args := sb.Select("*").
@@ -28,13 +29,16 @@ func (ur UserRepository) FindById(user u.IUser) error {
 		Limit(1).
 		Build()
 
-	if err := ur.db.Get(&user, query, args...); err != nil {
+	if err := ur.db.Get(user, query, args...); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return e.NotFoundError
+		}
 		return err
 	}
 	return nil
 }
 
-func (ur UserRepository) FindByEmail(user u.IUser) error {
+func (ur UserRepository) FindByEmail(user *u.User) error {
 	sb := sqlbuilder.NewSelectBuilder()
 
 	query, args := sb.Select("*").
@@ -43,41 +47,28 @@ func (ur UserRepository) FindByEmail(user u.IUser) error {
 		Limit(1).
 		Build()
 
-	var dbUser u.User
-
-	if err := ur.db.Get(&dbUser, query, args...); err != nil {
+	if err := ur.db.Get(user, query, args...); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return e.NotFoundError
 		}
 		return err
 	}
 
-	user.
-		SetId(dbUser.GetId()).
-		SetName(dbUser.GetName()).
-		SetPassword(dbUser.GetPassword())
-
 	return nil
 }
 
 func (ur UserRepository) ExistsByEmail(email string) bool {
-	sb := sqlbuilder.NewSelectBuilder()
 
-	subQuery := sb.Select("1").From("users").Where(sb.Equal("email", email))
-
-	query, args := sb.Select(sb.Exists(subQuery)).Build()
+	query := "SELECT EXISTS (SELECT 1 FROM users WHERE email = $1)"
 
 	var exists bool
-	if err := ur.db.QueryRow(query, args...).Scan(&exists); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return false
-		}
-		panic(err)
+	if err := ur.db.QueryRow(query, email).Scan(&exists); err != nil {
+		log.Println(err)
 	}
 	return exists
 }
 
-func (ur UserRepository) Create(user u.IUser) error {
+func (ur UserRepository) Create(user *u.User) (err error) {
 
 	sb := sqlbuilder.NewInsertBuilder()
 
@@ -87,17 +78,14 @@ func (ur UserRepository) Create(user u.IUser) error {
 		SQL("RETURNING id").
 		Build()
 
-	var id int
-	if err := ur.db.QueryRow(query, args...).Scan(&id); err != nil {
+	if err := ur.db.QueryRow(query, args...).Scan(&user.Id); err != nil {
 		return err
 	}
-
-	user.SetId(id)
 
 	return nil
 }
 
-func (ur UserRepository) Update(user u.IUser) error {
+func (ur UserRepository) Update(user *u.User) (err error) {
 
 	sb := sqlbuilder.NewUpdateBuilder()
 
@@ -112,18 +100,22 @@ func (ur UserRepository) Update(user u.IUser) error {
 		Where(sb.Equal("id", user.GetId())).
 		Build()
 
-	_, err := ur.db.Exec(query, args...)
+	if _, err := ur.db.Exec(query, args...); err != nil {
+		return err
+	}
 
 	return err
 }
 
-func (ur UserRepository) Delete(user u.IUser) error {
+func (ur UserRepository) Delete(user *u.User) (err error) {
 
 	sb := sqlbuilder.NewDeleteBuilder()
 
 	query, args := sb.DeleteFrom("users").Where(sb.Equal("id", user.GetId())).Build()
 
-	_, err := ur.db.Exec(query, args...)
+	if _, err := ur.db.Exec(query, args...); err != nil {
+		return err
+	}
 
 	return err
 }

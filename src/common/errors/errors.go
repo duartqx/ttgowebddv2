@@ -29,7 +29,7 @@ type ValidationErrors struct {
 func (ves ValidationErrors) Error() string {
 	errStr := ""
 	for tag, value := range *ves.Decode() {
-		errStr += fmt.Sprintf("%v: %v ", tag, value)
+		errStr += fmt.Sprintf("%s: %s ", tag, value)
 	}
 	return errStr
 }

@@ -1,12 +1,12 @@
 package user
 
 type IUserRepository interface {
-	FindById(user IUser) error
+	FindById(user *User) error
 
-	FindByEmail(user IUser) error
+	FindByEmail(user *User) error
 	ExistsByEmail(email string) bool
 
-	Create(user IUser) error
-	Update(user IUser) error
-	Delete(user IUser) error
+	Create(user *User) error
+	Update(user *User) error
+	Delete(user *User) error
 }

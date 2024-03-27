@@ -2,14 +2,14 @@ package user
 
 type IUser interface {
 	GetId() int
-	SetId(id int) IUser
+	SetId(id int) *User
 
 	GetName() string
-	SetName(name string) IUser
+	SetName(name string) *User
 
 	GetPassword() string
-	SetPassword(password string) IUser
+	SetPassword(password string) *User
 
 	GetEmail() string
-	SetEmail(email string) IUser
+	SetEmail(email string) *User
 }

@@ -1,11 +1,11 @@
 package user
 
 type IUserService interface {
-	FindById(user IUser) error
+	FindById(user *User) error
 
-	Create(user IUser) error
-	Update(user IUser) error
-	Delete(user IUser) error
+	Create(user *User) error
+	Update(user *User) error
+	Delete(user *User) error
 
-	UpdatePassword(user IUser) error
+	UpdatePassword(user *User) error
 }

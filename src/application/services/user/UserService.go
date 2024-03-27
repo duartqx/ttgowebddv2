@@ -27,7 +27,7 @@ func GetUserService(userRepository u.IUserRepository) *UserService {
 	return userService
 }
 
-func (us UserService) Create(user u.IUser) error {
+func (us UserService) Create(user *u.User) error {
 
 	if user.GetEmail() == "" || us.userRepository.ExistsByEmail(user.GetEmail()) {
 		return fmt.Errorf("%w: Invalid Email", e.BadRequestError)
@@ -53,7 +53,7 @@ func (us UserService) Create(user u.IUser) error {
 	return nil
 }
 
-func (us UserService) UpdatePassword(user u.IUser) error {
+func (us UserService) UpdatePassword(user *u.User) error {
 	if user.GetId() == 0 {
 		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
 	}
@@ -85,7 +85,7 @@ func (us UserService) UpdatePassword(user u.IUser) error {
 	return nil
 }
 
-func (us UserService) Update(user u.IUser) error {
+func (us UserService) Update(user *u.User) error {
 	if user.GetId() == 0 ||
 		user.GetEmail() == "" ||
 		user.GetPassword() == "" ||
@@ -96,14 +96,14 @@ func (us UserService) Update(user u.IUser) error {
 	return us.UpdatePassword(user)
 }
 
-func (us UserService) FindById(user u.IUser) error {
+func (us UserService) FindById(user *u.User) error {
 	if user.GetId() == 0 {
 		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
 	}
 	return us.userRepository.FindById(user)
 }
 
-func (us UserService) Delete(user u.IUser) error {
+func (us UserService) Delete(user *u.User) error {
 	if user.GetId() == 0 {
 		return fmt.Errorf("%w: Invalid User", e.BadRequestError)
 	}
