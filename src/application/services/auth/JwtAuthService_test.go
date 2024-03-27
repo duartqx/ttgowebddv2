@@ -3,23 +3,42 @@ package auth_test
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
 	j "github.com/duartqx/ddgobase/src/application/services/auth"
 	u "github.com/duartqx/ddgobase/src/domains/user"
 	r "github.com/duartqx/ddgobase/src/infrastructure/repository"
-	m "github.com/duartqx/ddgobase/src/infrastructure/repository/mock"
+	s "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
+	"github.com/jmoiron/sqlx"
 )
 
 var (
+	db *sqlx.DB
+
 	secret            = []byte("secret")
+	sessionRepository *r.SessionRepository
+	userRepository    *s.UserRepository
+	jwtAuthService    *j.JwtAuthService
+)
+
+func TestMain(m *testing.M) {
+	db = s.GetInMemoryDB("jwtauthservice")
+	defer db.Close()
+
+	s.Seed(db)
+
 	sessionRepository = r.GetSessionRepository()
-	userRepository    = m.GetMockUserRepository()
-	jwtAuthService    = j.GetJwtAuthService(
+	userRepository = s.GetUserRepository(db)
+	jwtAuthService = j.GetJwtAuthService(
 		userRepository, sessionRepository, &secret,
 	)
-)
+
+	code := m.Run()
+
+	os.Exit(code)
+}
 
 func TestLoginAndValidateAuth(t *testing.T) {
 	tests := []struct {
@@ -53,12 +72,12 @@ func TestLoginAndValidateAuth(t *testing.T) {
 			err:  false,
 		},
 		{
-			name: "PassCorrectTest1",
+			name: "PassCorrectTest2",
 			user: u.User{Email: "test2@test2.com", Password: "randompassword"},
 			err:  false,
 		},
 		{
-			name: "PassCorrectTest1",
+			name: "PassCorrectTest3",
 			user: u.User{Email: "test3@test3.com", Password: "randompassword"},
 			err:  false,
 		},

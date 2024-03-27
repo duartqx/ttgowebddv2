@@ -1,49 +1,72 @@
 package user_test
 
 import (
+	"os"
 	"testing"
 
-	s "github.com/duartqx/ddgobase/src/application/services/user"
+	"github.com/jmoiron/sqlx"
+
+	us "github.com/duartqx/ddgobase/src/application/services/user"
 	u "github.com/duartqx/ddgobase/src/domains/user"
-	m "github.com/duartqx/ddgobase/src/infrastructure/repository/mock"
+	s "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
 )
 
-var userService u.IUserService = s.GetUserService(m.GetMockUserRepository())
+var (
+	db *sqlx.DB
+
+	userRepository *s.UserRepository
+	userService    *us.UserService
+)
+
+func TestMain(m *testing.M) {
+
+	db = s.GetInMemoryDB("userservice")
+	defer db.Close()
+
+	userRepository = s.GetUserRepository(db)
+	userService = us.GetUserService(userRepository)
+
+	s.Seed(db)
+
+	code := m.Run()
+
+	os.Exit(code)
+}
 
 func TestCreate(t *testing.T) {
 	tests := []struct {
 		name string
-		user u.User
+		user *u.User
 		err  bool
 	}{
 		{
 			name: "FailEmailInvalid",
-			user: u.User{Name: "Test User 1", Email: "", Password: "randompassword"},
+			user: &u.User{Name: "Test User 1", Email: "", Password: "randompassword"},
 			err:  true,
 		},
 		{
 			name: "FailEmailExists",
-			user: u.User{Name: "Test User 1", Email: "test1@test1.com", Password: "randompassword"},
+			user: &u.User{Name: "Test User 1", Email: "test1@test1.com", Password: "randompassword"},
 			err:  true,
 		},
 		{
 			name: "FailNameInvalid",
-			user: u.User{Name: "", Email: "teste7@teste7.com", Password: "randompassword"},
+			user: &u.User{Name: "", Email: "teste7@teste7.com", Password: "randompassword"},
 			err:  true,
 		},
 		{
 			name: "FailNameEmailInvalid",
-			user: u.User{Name: "", Email: "", Password: "randompassword"},
+			user: &u.User{Name: "", Email: "", Password: "randompassword"},
 			err:  true,
 		},
 		{
 			name: "FailInvalidPassword",
-			user: u.User{Name: "Test User 1", Email: "teste99@99.com", Password: ""},
+			user: &u.User{Name: "Test User 1", Email: "teste99@99.com", Password: ""},
 			err:  true,
 		},
 		{
 			name: "PassEmailDoesNotExists",
-			user: u.User{Name: "Test User 6", Email: "test6@test6.com", Password: "randompassword"},
+			user: &u.User{Name: "Test User 6", Email: "test6@test6.com", Password: "randompassword"},
 			err:  false,
 		},
 	}
@@ -51,9 +74,7 @@ func TestCreate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			err := userService.Create(&tt.user)
-
-			t.Logf("Create Error: %v", err)
+			err := userService.Create(tt.user)
 
 			if tt.err && err == nil {
 				t.Fatalf("Expected an error, got nil")
@@ -67,12 +88,11 @@ func TestCreate(t *testing.T) {
 		})
 	}
 }
-
 func TestFindById(t *testing.T) {
 	tests := []struct {
 		name     string
 		expected int
-		user     u.IUser
+		user     *u.User
 		err      bool
 	}{
 		{name: "PassIdExists1", expected: 1, user: &u.User{Id: 1}, err: false},
@@ -87,8 +107,6 @@ func TestFindById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			err := userService.FindById(tt.user)
-
-			t.Logf("FindById Error: %v", err)
 
 			if tt.err && err == nil {
 				t.Fatalf("Expected an error with id == %d, got nil", tt.expected)
@@ -114,13 +132,13 @@ func TestFindById(t *testing.T) {
 func TestUpdatePassword(t *testing.T) {
 	tests := []struct {
 		name        string
-		user        u.User
+		user        *u.User
 		oldPassword string
 		err         bool
 	}{
 		{
 			name: "PassNewPassword",
-			user: u.User{
+			user: &u.User{
 				Id:       1,
 				Name:     "Test User 1",
 				Email:    "test1@test1.com",
@@ -131,7 +149,7 @@ func TestUpdatePassword(t *testing.T) {
 		},
 		{
 			name: "FailInvalidPassword",
-			user: u.User{
+			user: &u.User{
 				Id:       1,
 				Name:     "Test User 1",
 				Email:    "test1@test1.com",
@@ -142,7 +160,7 @@ func TestUpdatePassword(t *testing.T) {
 		},
 		{
 			name: "FailInvalidId",
-			user: u.User{
+			user: &u.User{
 				Id:       0,
 				Name:     "Test User 1",
 				Email:    "test1@test1.com",
@@ -153,7 +171,7 @@ func TestUpdatePassword(t *testing.T) {
 		},
 		{
 			name: "FailInvalidIdInvalidPassword",
-			user: u.User{
+			user: &u.User{
 				Id:       0,
 				Name:     "Test User 1",
 				Email:    "test1@test1.com",
@@ -164,7 +182,7 @@ func TestUpdatePassword(t *testing.T) {
 		},
 		{
 			name: "PassSamePassword",
-			user: u.User{
+			user: &u.User{
 				Id:       1,
 				Name:     "Test User 1",
 				Email:    "test1@test1.com",
@@ -178,9 +196,7 @@ func TestUpdatePassword(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			err := userService.UpdatePassword(&tt.user)
-
-			t.Logf("UpdatePassword Error: %v", err)
+			err := userService.UpdatePassword(tt.user)
 
 			if tt.err && err == nil {
 				t.Fatalf("Expected an error, got nil")
