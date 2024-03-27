@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	dto "github.com/duartqx/ttgowebddv2/api/dto"
-	h "github.com/duartqx/ttgowebddv2/api/http"
-	e "github.com/duartqx/ttgowebddv2/common/errors"
-	a "github.com/duartqx/ttgowebddv2/domains/auth"
-	t "github.com/duartqx/ttgowebddv2/domains/task"
+	dto "github.com/duartqx/ttgowebddv2/src/api/dto"
+	h "github.com/duartqx/ttgowebddv2/src/api/http"
+	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
+	t "github.com/duartqx/ttgowebddv2/src/domains/task"
 )
 
 type TaskController struct {

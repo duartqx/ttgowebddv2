@@ -6,9 +6,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	us "github.com/duartqx/ddgobase/internal/application/services/user"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
-	r "github.com/duartqx/ddgobase/internal/infrastructure/repository/sqlite"
+	us "github.com/duartqx/ttgowebddv2/src/application/services/user"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
+	r "github.com/duartqx/ttgowebddv2/src/infrastructure/repository/sqlite"
 )
 
 var (

@@ -9,9 +9,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 
-	e "github.com/duartqx/ddgobase/internal/common/errors"
-	a "github.com/duartqx/ddgobase/internal/domains/auth"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 type JwtAuthService struct {

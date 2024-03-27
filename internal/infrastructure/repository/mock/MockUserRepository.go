@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/duartqx/ddgobase/internal/common/errors"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	"github.com/duartqx/ttgowebddv2/src/common/errors"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 var (

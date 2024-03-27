@@ -8,8 +8,8 @@ import (
 	sqlb "github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
 
-	e "github.com/duartqx/ttgowebddv2/common/errors"
-	t "github.com/duartqx/ttgowebddv2/domains/task"
+	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	t "github.com/duartqx/ttgowebddv2/src/domains/task"
 )
 
 type TaskRepository struct {

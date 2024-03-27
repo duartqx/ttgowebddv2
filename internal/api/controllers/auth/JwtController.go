@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/duartqx/ddgobase/internal/api/dto"
-	h "github.com/duartqx/ddgobase/internal/api/http"
-	e "github.com/duartqx/ddgobase/internal/common/errors"
-	a "github.com/duartqx/ddgobase/internal/domains/auth"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	"github.com/duartqx/ttgowebddv2/src/api/dto"
+	h "github.com/duartqx/ttgowebddv2/src/api/http"
+	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 type JwtController struct {

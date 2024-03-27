@@ -5,9 +5,9 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	v "github.com/duartqx/ddgobase/internal/application/validation"
-	e "github.com/duartqx/ddgobase/internal/common/errors"
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	v "github.com/duartqx/ttgowebddv2/src/application/validation"
+	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 type UserService struct {

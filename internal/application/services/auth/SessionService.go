@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	a "github.com/duartqx/ddgobase/internal/domains/auth"
+	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
 )
 
 type SessionService struct {

@@ -1,7 +1,7 @@
 package auth
 
 import (
-	u "github.com/duartqx/ddgobase/internal/domains/user"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 type ISessionUser interface {

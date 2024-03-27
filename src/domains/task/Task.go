@@ -3,7 +3,7 @@ package task
 import (
 	"time"
 
-	u "github.com/duartqx/ttgowebddv2/domains/user"
+	u "github.com/duartqx/ttgowebddv2/src/domains/user"
 )
 
 type Task struct {
