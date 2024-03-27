@@ -11,8 +11,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/jmoiron/sqlx"
 
-	"github.com/duartqx/ddgobase/api/server"
-	"github.com/duartqx/ddgobase/infrastructure/repository"
+	"github.com/duartqx/ddgobase/src/api/server"
+	"github.com/duartqx/ddgobase/src/infrastructure/repository"
 )
 
 type env struct {

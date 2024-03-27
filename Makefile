@@ -4,10 +4,10 @@ update:
 	go get -u ./...
 
 test:
-	go test ./... | grep -v '?'
+	cd ./src && go test ./... | grep -v '?'; cd ./..
 
 vtest:
-	go test -v ./... | grep -v '?'
+	cd ./src && go test ./... -v | grep -v '?'; cd ./..
 
 dotenv:
 	set -a && source ./.env
