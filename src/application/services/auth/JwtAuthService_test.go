@@ -7,30 +7,31 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jmoiron/sqlx"
+
 	j "github.com/duartqx/ddgobase/src/application/services/auth"
 	u "github.com/duartqx/ddgobase/src/domains/user"
-	r "github.com/duartqx/ddgobase/src/infrastructure/repository"
-	s "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
-	"github.com/jmoiron/sqlx"
+	s "github.com/duartqx/ddgobase/src/infrastructure/repository"
+	r "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
 )
 
 var (
 	db *sqlx.DB
 
 	secret            = []byte("secret")
-	sessionRepository *r.SessionRepository
-	userRepository    *s.UserRepository
+	sessionRepository *s.SessionRepository
+	userRepository    *r.UserRepository
 	jwtAuthService    *j.JwtAuthService
 )
 
 func TestMain(m *testing.M) {
-	db = s.GetInMemoryDB("jwtauthservice")
+	db = r.GetInMemoryDB("jwtauthservice")
 	defer db.Close()
 
-	s.Seed(db)
+	r.Seed(db)
 
-	sessionRepository = r.GetSessionRepository()
-	userRepository = s.GetUserRepository(db)
+	sessionRepository = s.GetSessionRepository()
+	userRepository = r.GetUserRepository(db)
 	jwtAuthService = j.GetJwtAuthService(
 		userRepository, sessionRepository, &secret,
 	)

@@ -8,25 +8,25 @@ import (
 
 	us "github.com/duartqx/ddgobase/src/application/services/user"
 	u "github.com/duartqx/ddgobase/src/domains/user"
-	s "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
+	r "github.com/duartqx/ddgobase/src/infrastructure/repository/sqlite"
 )
 
 var (
 	db *sqlx.DB
 
-	userRepository *s.UserRepository
+	userRepository *r.UserRepository
 	userService    *us.UserService
 )
 
 func TestMain(m *testing.M) {
 
-	db = s.GetInMemoryDB("userservice")
+	db = r.GetInMemoryDB("userservice")
 	defer db.Close()
 
-	userRepository = s.GetUserRepository(db)
+	userRepository = r.GetUserRepository(db)
 	userService = us.GetUserService(userRepository)
 
-	s.Seed(db)
+	r.Seed(db)
 
 	code := m.Run()
 
