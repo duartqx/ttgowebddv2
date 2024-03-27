@@ -39,14 +39,16 @@ func (tr TaskRepository) getJoinedQueryBuilder() *sqlb.SelectBuilder {
 			"COALESCE(u.email, '') AS 'user.email'",
 		).
 		From("tasks t").
-		Join("users u", "u.id = t.user_id")
+		JoinWithOption(sqlb.LeftJoin, "users u", "u.id = t.user_id")
 }
 
 func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 
 	sb := tr.getJoinedQueryBuilder()
 
-	sb.Where(sb.Equal("t.user_id", tf.GetUserId()))
+	if tf.GetUserId() != 0 {
+		sb.Where(sb.Equal("t.user_id", tf.GetUserId()))
+	}
 
 	if tf.GetTag() != "" {
 		sb.Where(sb.Equal("t.tag", tf.GetTag()))

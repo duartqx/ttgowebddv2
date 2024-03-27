@@ -42,9 +42,18 @@ func Seed(db *sqlx.DB) error {
 				end_at DATETIME DEFAULT NULL,
 				completed INTEGER DEFAULT 0,
 				sprint TEXT NOT NULL,
-				user_id INTEGER NOT NULL DEFAULT 1 REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+				user_id INTEGER NOT NULL DEFAULT 1
+				REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
 			);
 			CREATE INDEX tasks_sprint_index ON tasks (sprint ASC);
+
+			INSERT INTO tasks ( tag, description, sprint, completed, user_id )
+			VALUES
+				( 'AJ-ABCD', 'Test Task 1', '81', 0, 1 ),
+				( 'AJ-EFGH', 'Test Task 2', '81', 1, 2 ),
+				( 'AJ-IJKL', 'Test Task 3', '81', 1, 3 ),
+				( 'AJ-MNOP', 'Test Task 4', '82', 0, 1 ),
+				( 'AJ-QRST', 'Test Task 5', '83', 0, 2 );
 
 			COMMIT;
 		`,
