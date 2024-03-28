@@ -147,28 +147,46 @@ func (tr TaskRepository) Create(task *t.Task) error {
 		task.GetUserId(),
 	}
 
-	query := `
-		BEGIN TRANSACTION;
+	tx, err := tr.db.Beginx()
+	if err != nil {
+		return err
+	}
 
-		WITH new_task AS (
+	var id int
+	if err := tx.Get(
+		&id,
+		`
 			INSERT INTO tasks (tag, sprint, description, user_id)
-			VALUES ($1, $2, $3, $4)
-			RETURNING id, start_at, user_id
-		);
+			VALUES (?, ?, ?, ?)
+			RETURNING id
+		`,
+		args...,
+	); err != nil {
+		tx.Rollback()
+		return err
+	}
 
+	query := `
 		SELECT
 			t.id AS id,
 			t.start_at AS start_at,
-			u.id AS 'user.id',
-			u.name AS 'user.name',
-			u.email AS 'user.email'
-		FROM new_task t
-		LEFT JOIN users u ON u.id = t.user_id;
-
-		COMMIT;
+			u.id AS "user.id",
+			u.name AS "user.name",
+			u.email AS "user.email"
+		FROM tasks t
+		JOIN users u ON t.user_id = u.id
+		WHERE t.id = ?;
 	`
 
-	if err := tr.db.Get(task, query, args...); err != nil {
+	if err := tx.Get(task, query, id); err != nil {
+		tx.Rollback()
+		if errors.Is(err, sql.ErrNoRows) {
+			return e.BadRequestError
+		}
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
 		return err
 	}
 
