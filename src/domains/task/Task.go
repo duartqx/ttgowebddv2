@@ -27,7 +27,7 @@ func (t Task) GetId() int {
 	return t.Id
 }
 
-func (t *Task) SetId(id int) ITask {
+func (t *Task) SetId(id int) *Task {
 	t.Id = id
 	return t
 }
@@ -36,7 +36,7 @@ func (t Task) GetTag() string {
 	return t.Tag
 }
 
-func (t *Task) SetTag(tag string) ITask {
+func (t *Task) SetTag(tag string) *Task {
 	t.Tag = tag
 	return t
 }
@@ -45,7 +45,7 @@ func (t Task) GetSprint() string {
 	return t.Sprint
 }
 
-func (t *Task) SetSprint(sprint string) ITask {
+func (t *Task) SetSprint(sprint string) *Task {
 	t.Sprint = sprint
 	return t
 }
@@ -54,7 +54,7 @@ func (t Task) GetDescription() string {
 	return t.Description
 }
 
-func (t *Task) SetDescription(description string) ITask {
+func (t *Task) SetDescription(description string) *Task {
 	t.Description = description
 	return t
 }
@@ -63,7 +63,7 @@ func (t Task) GetCompleted() bool {
 	return t.Completed
 }
 
-func (t *Task) SetCompleted(completed bool) ITask {
+func (t *Task) SetCompleted(completed bool) *Task {
 	t.Completed = completed
 	return t
 }
@@ -72,7 +72,7 @@ func (t Task) GetStartAt() *time.Time {
 	return t.StartAt
 }
 
-func (t *Task) SetStartAt(startAt *time.Time) ITask {
+func (t *Task) SetStartAt(startAt *time.Time) *Task {
 	t.StartAt = startAt
 	return t
 }
@@ -81,7 +81,7 @@ func (t Task) GetEndAt() *time.Time {
 	return t.EndAt
 }
 
-func (t *Task) SetEndAt(endAt *time.Time) ITask {
+func (t *Task) SetEndAt(endAt *time.Time) *Task {
 	t.EndAt = endAt
 	return t
 }
@@ -90,7 +90,7 @@ func (t Task) GetUserId() int {
 	return t.UserId
 }
 
-func (t *Task) SetUserId(id int) ITask {
+func (t *Task) SetUserId(id int) *Task {
 	t.UserId = id
 	return t
 }
@@ -99,7 +99,7 @@ func (t Task) GetUser() u.IUser {
 	return t.User
 }
 
-func (t *Task) SetUser(user u.IUser) ITask {
+func (t *Task) SetUser(user u.IUser) *Task {
 	t.User.
 		SetId(user.GetId()).
 		SetName(user.GetName()).
@@ -110,7 +110,7 @@ func (t *Task) SetUser(user u.IUser) ITask {
 	return t
 }
 
-func (t *Task) ToLocaltime() ITask {
+func (t *Task) ToLocaltime() *Task {
 	if t.GetStartAt() != nil {
 		localtimeStartAt := t.GetStartAt().Local()
 		t.SetStartAt(&localtimeStartAt)

@@ -8,31 +8,31 @@ import (
 
 type ITask interface {
 	GetId() int
-	SetId(id int) ITask
+	SetId(id int) *Task
 
 	GetTag() string
-	SetTag(tag string) ITask
+	SetTag(tag string) *Task
 
 	GetSprint() string
-	SetSprint(sprint string) ITask
+	SetSprint(sprint string) *Task
 
 	GetDescription() string
-	SetDescription(description string) ITask
+	SetDescription(description string) *Task
 
 	GetCompleted() bool
-	SetCompleted(completed bool) ITask
+	SetCompleted(completed bool) *Task
 
 	GetStartAt() *time.Time
-	SetStartAt(startAt *time.Time) ITask
+	SetStartAt(startAt *time.Time) *Task
 
 	GetEndAt() *time.Time
-	SetEndAt(endAt *time.Time) ITask
+	SetEndAt(endAt *time.Time) *Task
 
 	GetUserId() int
-	SetUserId(id int) ITask
+	SetUserId(id int) *Task
 
 	GetUser() u.IUser
-	SetUser(user u.IUser) ITask
+	SetUser(user u.IUser) *Task
 
-	ToLocaltime() ITask
+	ToLocaltime() *Task
 }
