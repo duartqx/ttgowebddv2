@@ -29,8 +29,7 @@ func (ts TaskService) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 }
 
 func (ts TaskService) isInvalidTask(task *t.Task) bool {
-	return task.GetTag() == "" || task.GetSprint() == ""
-
+	return task.GetTag() == "" || task.GetSprint() == "" || task.GetUserId() == 0
 }
 
 func (ts TaskService) Create(task *t.Task) error {
@@ -40,7 +39,7 @@ func (ts TaskService) Create(task *t.Task) error {
 	}
 
 	if err := ts.taskRepository.Create(task); err != nil {
-		return fmt.Errorf("%w: Error Trying to Create Task", e.InternalError)
+		return err
 	}
 
 	return nil
