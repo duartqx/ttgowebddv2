@@ -30,9 +30,21 @@ func Seed(db *sqlx.DB) error {
 
 			INSERT INTO users ( name, email, password )
 			VALUES
-				( 'Test User 1', 'test1@test1.com', '$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW' ),
-				( 'Test User 2', 'test2@test2.com', '$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW' ),
-				( 'Test User 3', 'test3@test3.com', '$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW' );
+				(
+					'Test User 1',
+					'test1@test1.com',
+					'$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW'
+				),
+				(
+					'Test User 2',
+					'test2@test2.com',
+					'$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW'
+				),
+				(
+					'Test User 3',
+					'test3@test3.com',
+					'$2a$10$HpNsS.a6Q6ThR0nsAuuMS.6UbSGDB9/Do5C.zZFfJBEKjOQOk/UaW'
+				);
 
 			CREATE TABLE tasks (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,

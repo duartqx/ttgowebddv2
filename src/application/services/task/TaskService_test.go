@@ -45,8 +45,9 @@ func TestFilter(t *testing.T) {
 			results: 5,
 		},
 		{
-			name:    "CompletedFilterHasTwoResultsTestCase",
-			filter:  task.GetTaskFilter().SetCompleted(task.CompletedStatus.Completed),
+			name: "CompletedFilterHasTwoResultsTestCase",
+			filter: task.GetTaskFilter().
+				SetCompleted(task.CompletedStatus.Completed),
 			results: 2,
 		},
 		{
@@ -65,8 +66,10 @@ func TestFilter(t *testing.T) {
 			results: 1,
 		},
 		{
-			name:    "UserId2AndCompletedFilterHasOneResultsTestCase",
-			filter:  task.GetTaskFilter().SetUserId(3).SetCompleted(task.CompletedStatus.Completed),
+			name: "UserId2AndCompletedFilterHasOneResultsTestCase",
+			filter: task.GetTaskFilter().
+				SetUserId(3).
+				SetCompleted(task.CompletedStatus.Completed),
 			results: 1,
 		},
 		{
@@ -96,7 +99,11 @@ func TestFilter(t *testing.T) {
 
 			results := len(*tasks)
 			if results != tt.results {
-				t.Fatalf("Mismatch results, have %d, wants %d!", results, tt.results)
+				t.Fatalf(
+					"Mismatch results, have %d, wants %d!",
+					results,
+					tt.results,
+				)
 			}
 		})
 	}

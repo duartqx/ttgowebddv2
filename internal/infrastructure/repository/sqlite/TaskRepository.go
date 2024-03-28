@@ -114,7 +114,9 @@ func (tr TaskRepository) Update(task *t.Task) error {
 	return nil
 }
 
-func (tr TaskRepository) findByWhere(task *t.Task, query string, args ...interface{}) error {
+func (tr TaskRepository) findByWhere(
+	task *t.Task, query string, args ...interface{},
+) error {
 
 	if err := tr.db.Get(&task, query, args...); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -197,7 +199,10 @@ func (tr TaskRepository) GetSprints() *[]string {
 
 	var sprints []string
 
-	query, _ := sqlb.NewSelectBuilder().From("tasks").Select("sprint").GroupBy("sprint").Build()
+	query, _ := sqlb.NewSelectBuilder().
+		Select("sprint").
+		From("tasks").
+		GroupBy("sprint").Build()
 
 	if err := tr.db.Select(&sprints, query); err != nil {
 		panic(err)
