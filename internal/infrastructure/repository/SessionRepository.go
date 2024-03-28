@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
+	a "github.com/duartqx/ttgowebddv2/internal/domains/auth"
 )
 
 type Session struct {

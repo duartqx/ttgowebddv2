@@ -8,8 +8,8 @@ import (
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
 
-	e "github.com/duartqx/ttgowebddv2/src/common/errors"
-	u "github.com/duartqx/ttgowebddv2/src/domains/user"
+	e "github.com/duartqx/ttgowebddv2/internal/common/errors"
+	u "github.com/duartqx/ttgowebddv2/internal/domains/user"
 )
 
 type UserRepository struct {

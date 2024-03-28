@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strconv"
 
-	dto "github.com/duartqx/ttgowebddv2/src/api/dto"
-	h "github.com/duartqx/ttgowebddv2/src/api/http"
-	e "github.com/duartqx/ttgowebddv2/src/common/errors"
-	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
-	t "github.com/duartqx/ttgowebddv2/src/domains/task"
+	dto "github.com/duartqx/ttgowebddv2/internal/api/dto"
+	h "github.com/duartqx/ttgowebddv2/internal/api/http"
+	e "github.com/duartqx/ttgowebddv2/internal/common/errors"
+	a "github.com/duartqx/ttgowebddv2/internal/domains/auth"
+	t "github.com/duartqx/ttgowebddv2/internal/domains/task"
 )
 
 type TaskController struct {
@@ -40,7 +40,7 @@ func (tc TaskController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var taskDTO dto.TaskCreateDTO
+	var taskDTO dto.TaskCreate
 
 	if err := json.NewDecoder(r.Body).Decode(&taskDTO); err != nil {
 		http.Error(w, e.BadRequestError.Error(), http.StatusBadRequest)
@@ -77,7 +77,7 @@ func (tc TaskController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var taskDTO dto.TaskUpdateDTO
+	var taskDTO dto.TaskUpdate
 
 	if err := json.NewDecoder(r.Body).Decode(&taskDTO); err != nil {
 		http.Error(w, e.BadRequestError.Error(), http.StatusBadRequest)

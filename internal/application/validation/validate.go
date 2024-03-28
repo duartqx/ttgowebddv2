@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 
-	e "github.com/duartqx/ttgowebddv2/src/common/errors"
+	e "github.com/duartqx/ttgowebddv2/internal/common/errors"
 )
 
 type Validator struct {

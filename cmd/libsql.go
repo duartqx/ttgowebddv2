@@ -6,7 +6,7 @@ package main
 import (
 	"log"
 
-	"github.com/duartqx/ddgobase/infrastructure/internal/repository/sqlite"
+	"github.com/duartqx/ttgowebddv2/infrastructure/internal/repository/sqlite"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )

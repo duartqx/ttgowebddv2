@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/duartqx/ttgowebddv2/src/domains/user"
+	"github.com/duartqx/ttgowebddv2/internal/domains/user"
 )
 
 type SessionUser struct {

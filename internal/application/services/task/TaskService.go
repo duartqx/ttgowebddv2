@@ -3,8 +3,8 @@ package task
 import (
 	"fmt"
 
-	e "github.com/duartqx/ttgowebddv2/src/common/errors"
-	t "github.com/duartqx/ttgowebddv2/src/domains/task"
+	e "github.com/duartqx/ttgowebddv2/internal/common/errors"
+	t "github.com/duartqx/ttgowebddv2/internal/domains/task"
 )
 
 type TaskService struct {

@@ -9,10 +9,10 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	j "github.com/duartqx/ttgowebddv2/src/application/services/auth"
-	u "github.com/duartqx/ttgowebddv2/src/domains/user"
-	s "github.com/duartqx/ttgowebddv2/src/infrastructure/repository"
-	r "github.com/duartqx/ttgowebddv2/src/infrastructure/repository/sqlite"
+	j "github.com/duartqx/ttgowebddv2/internal/application/services/auth"
+	u "github.com/duartqx/ttgowebddv2/internal/domains/user"
+	s "github.com/duartqx/ttgowebddv2/internal/infrastructure/repository"
+	r "github.com/duartqx/ttgowebddv2/internal/infrastructure/repository/sqlite"
 )
 
 var (

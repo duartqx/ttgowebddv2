@@ -2,13 +2,13 @@ package dto
 
 import "time"
 
-type TaskCreateDTO struct {
+type TaskCreate struct {
 	Tag         string `json:"tag"`
 	Sprint      int    `json:"sprint"`
 	Description string `json:"description"`
 }
 
-type TaskUpdateDTO struct {
+type TaskUpdate struct {
 	Tag         string    `json:"tag"`
 	Sprint      int       `json:"sprint"`
 	Description string    `json:"description"`

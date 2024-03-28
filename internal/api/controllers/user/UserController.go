@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/duartqx/ttgowebddv2/src/api/dto"
-	h "github.com/duartqx/ttgowebddv2/src/api/http"
-	e "github.com/duartqx/ttgowebddv2/src/common/errors"
-	a "github.com/duartqx/ttgowebddv2/src/domains/auth"
-	u "github.com/duartqx/ttgowebddv2/src/domains/user"
+	"github.com/duartqx/ttgowebddv2/internal/api/dto"
+	h "github.com/duartqx/ttgowebddv2/internal/api/http"
+	e "github.com/duartqx/ttgowebddv2/internal/common/errors"
+	a "github.com/duartqx/ttgowebddv2/internal/domains/auth"
+	u "github.com/duartqx/ttgowebddv2/internal/domains/user"
 )
 
 type UserController struct {
