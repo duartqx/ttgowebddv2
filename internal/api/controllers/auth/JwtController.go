@@ -54,11 +54,13 @@ func (jc JwtController) Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(h.LoginResponse{
-		Token:     token,
-		ExpiresAt: expiresAt,
-		Status:    true,
-	}); err != nil {
+	if err := json.NewEncoder(w).Encode(
+		dto.Login{
+			Token:     token,
+			ExpiresAt: expiresAt,
+			Status:    true,
+		},
+	); err != nil {
 		h.ErrorResponse(w, err)
 	}
 }
@@ -80,7 +82,9 @@ func (jc JwtController) AuthenticatedMiddleware(next http.Handler) http.Handler 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		cookie, _ := r.Cookie(h.AuthCookieName)
-		claimsUser, err := jc.jwtService.ValidateAuth(r.Header.Get("Authorization"), cookie)
+		claimsUser, err := jc.jwtService.ValidateAuth(
+			r.Header.Get("Authorization"), cookie,
+		)
 
 		if err != nil {
 			http.SetCookie(w, h.GetInvalidCookie())
@@ -99,7 +103,9 @@ func (jc JwtController) UnauthenticatedMiddleware(next http.Handler) http.Handle
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		cookie, _ := r.Cookie(h.AuthCookieName)
-		claimsUser, _ := jc.jwtService.ValidateAuth(r.Header.Get("Authorization"), cookie)
+		claimsUser, _ := jc.jwtService.ValidateAuth(
+			r.Header.Get("Authorization"), cookie,
+		)
 
 		if claimsUser != nil {
 			http.SetCookie(w, h.GetInvalidCookie())
