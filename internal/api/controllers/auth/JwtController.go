@@ -55,7 +55,7 @@ func (jc JwtController) Login(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(
-		dto.Login{
+		dto.LoginResponse{
 			Token:     token,
 			ExpiresAt: expiresAt,
 			Status:    true,
