@@ -37,6 +37,7 @@ func (uc UserController) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, e.BadRequestError.Error(), http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
 
 	user := u.GetNewUser().
 		SetName(userDTO.Name).
@@ -76,6 +77,7 @@ func (uc UserController) UpdatePassword(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
 
 	userToUpdate := u.GetNewUser().SetId(user.GetId()).SetPassword(p.Password)
 

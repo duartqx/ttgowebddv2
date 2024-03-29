@@ -35,6 +35,7 @@ func (jc JwtController) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, e.BadRequestError.Error(), http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
 
 	user := u.GetNewUser().SetEmail(userDTO.Email).SetPassword(userDTO.Password)
 
