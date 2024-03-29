@@ -5,9 +5,9 @@ import (
 )
 
 type completedStatus struct {
-	Ignored     int
-	Completed   int
 	Incompleted int
+	Completed   int
+	Ignored     int
 }
 
 var CompletedStatus = completedStatus{
