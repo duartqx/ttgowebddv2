@@ -1,19 +1,9 @@
 package http
 
-import (
-	"time"
-
-	h "net/http"
-)
+import h "net/http"
 
 type Response struct {
 	Status int
 	Body   interface{}
 	Cookie *h.Cookie
-}
-
-type LoginResponse struct {
-	Token     string    `json:"token"`
-	ExpiresAt time.Time `json:"expiresAt"`
-	Status    bool      `json:"status"`
 }
