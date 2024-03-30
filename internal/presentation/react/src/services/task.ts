@@ -4,7 +4,7 @@ import Service from "./service";
 
 export default class TaskService extends Service {
     static endpoint: string = "/api/tasks/";
-    static filterEndpoint: string = "/api/filter/";
+    static filterEndpoint: string = "/api/tasks/filter/";
 
     public static async create(t: TaskCreate): Promise<Task | null> {
         try {

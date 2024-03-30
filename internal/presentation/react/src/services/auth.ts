@@ -4,9 +4,9 @@ import HttpClient from "./client";
 import Service from "./service";
 
 export default class AuthService extends Service {
-    static endpoint: string = "/api/user/";
-    static loginEndpoint: string = "/api/user/login/";
-    static logoutEndpoint: string = "/api/user/logout/";
+    static endpoint: string = "/api/users/";
+    static loginEndpoint: string = "/api/users/login/";
+    static logoutEndpoint: string = "/api/users/logout/";
 
     public static async login(user: User): Promise<LoginResponse> {
         try {
