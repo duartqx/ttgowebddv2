@@ -56,6 +56,7 @@ func NewServer(config *ServerConfig) *server {
 	return &server{
 		db:        config.Db,
 		jwtSecret: config.JwtSecret,
+		cors:      config.Cors,
 
 		mux: http.NewServeMux(),
 
