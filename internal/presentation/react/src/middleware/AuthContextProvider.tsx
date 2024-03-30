@@ -23,7 +23,7 @@ type AuthProviderProps = {
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-    const emptyUser: User = { email: "", password: "", name: "" };
+    const emptyUser: User = {} as User;
 
     const [user, setUser] = useState(emptyUser);
 
@@ -38,19 +38,19 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     };
 
     const register = async (user: User): Promise<Boolean> => {
-        const signUpUser = await AuthService.register(user);
-        return signUpUser?.email ? true : false;
+        return Boolean((await AuthService.register(user))?.email);
     };
 
-    const getUser = async (): Promise<User | null> => {
+    const getUser = async (): Promise<User> => {
         const exp = AuthService.getAuth()?.expires_at;
+
         if (!exp) {
-            return null;
+            return {} as User;
         }
 
         if (new Date(exp) < new Date()) {
             logout();
-            return null;
+            return {} as User;
         }
 
         if (!user?.email) {
@@ -67,6 +67,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     const isLoggedIn = () => {
         const exp = AuthService.getAuth()?.expires_at;
+
         if (!exp) {
             return false;
         }

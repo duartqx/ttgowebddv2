@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, HttpStatusCode } from "axios";
 
 const baseUrl = "http://127.0.0.1:8080";
 
@@ -9,7 +9,10 @@ const client = axios.create({
 client.interceptors.response.use(
     (res) => res,
     (error) => {
-        if (error.response && error.response.status === 401) {
+        if (
+            error.response &&
+            error.response.status === HttpStatusCode.Unauthorized
+        ) {
             localStorage.clear();
         }
         return Promise.reject(error);
