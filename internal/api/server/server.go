@@ -72,14 +72,14 @@ func (s *server) BaseUserRoutes() *server {
 	userMux := http.NewServeMux()
 
 	userMux.Handle(
-		"POST /login",
+		"POST /login/{$}",
 		s.jwtController.UnauthenticatedMiddleware(
 			http.HandlerFunc(s.jwtController.Login),
 		),
 	)
 
 	userMux.Handle(
-		"DELETE /logout",
+		"DELETE /logout/{$}",
 		s.jwtController.AuthenticatedMiddleware(
 			http.HandlerFunc(s.jwtController.Logout),
 		),
