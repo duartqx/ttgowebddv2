@@ -111,7 +111,7 @@ func (s *server) AddBaseUserRoutes() *server {
 		),
 	)
 
-	s.AddGroup("/api/user/", userMux)
+	s.AddGroup("/api/users/", userMux)
 
 	return s
 }
