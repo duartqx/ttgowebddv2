@@ -1,5 +1,8 @@
 all: build run
 
+pull-base:
+	git remote update && git pull base base
+
 update:
 	go get -u ./...
 
