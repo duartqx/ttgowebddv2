@@ -1,8 +1,9 @@
 import { User } from "./User";
 
 export enum Completed {
-    incompleted,
-    completed,
+    INCOMPLETED,
+    COMPLETED,
+    IGNORED,
 }
 
 export type Task = {

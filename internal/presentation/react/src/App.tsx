@@ -7,6 +7,7 @@ import AuthProvider from "./middleware/AuthContextProvider";
 import PrivateRouter from "./middleware/PrivateRouter";
 import Layout from "./pages/Layout";
 import { Paths } from "./paths";
+import Home from "./pages/Home";
 
 function App() {
     const router = createBrowserRouter([
@@ -20,11 +21,7 @@ function App() {
             children: [
                 {
                     index: true,
-                    element: (
-                        <>
-                            <h1>Logged in</h1>
-                        </>
-                    ),
+                    element: (<Home />),
                 },
             ],
         },

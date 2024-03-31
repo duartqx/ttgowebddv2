@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../middleware/AuthContextProvider";
+import Input from "../components/Input";
+import DarkButton from "../components/DarkButton";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -13,6 +15,13 @@ export default function Login() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!email || !password) {
+            console.log(
+                `Missing email or password: Email: '${email}'; Password: '${password}'`
+            );
+            return false;
+        }
 
         try {
             if (await login({ email, password })) {
@@ -27,26 +36,29 @@ export default function Login() {
         <>
             <form
                 onSubmit={handleLogin}
-                className="container m-auto w-screen"
+                className="
+                    container m-auto lg:w-2/5 md:w-3/5
+                    rounded-md bg-neutral-900 shadow-md shadow-neutral-950
+                "
             >
-                <div className="flex justify-between items-center md:w-3/5 lg:w-2/5 p-3">
-                    <label className="flex-grow-0 w-24">Email</label>
-                    <input
-                        type="email"
-                        placeholder="email@email.com"
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="rounded-md flex-grow"
-                    />
-                </div>
-                <div className="flex justify-between items-center md:w-3/5 lg:w-2/5 p-3">
-                    <label className="flex-grow-0 w-24">Password</label>
-                    <input
-                        type="password"
-                        placeholder=""
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="rounded-md flex-grow"
-                    />
-                </div>
+                <Input
+                    label="Email"
+                    inputId="login__email"
+                    inputType="email"
+                    placeholder="email@email.com"
+                    onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setEmail(e.target.value)
+                    }
+                />
+                <Input
+                    label="Password"
+                    inputId="login__password"
+                    inputType="password"
+                    onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setPassword(e.target.value)
+                    }
+                />
+                <DarkButton label="Login" />
             </form>
         </>
     );

@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import AuthService from "../services/auth";
+import AuthService from "../services/AuthService";
 import { User } from "../domains/User";
 
 export const AuthContext = React.createContext({
     login: async (user: User): Promise<Boolean> => false,
 
-    logout: async () => {},
+    logout: () => {},
 
     register: async (user: User): Promise<Boolean> => {
         return false;
     },
 
-    getUser: async (): Promise<User | null> => {
-        return null;
+    getUser: (): User => {
+        return {} as User;
     },
 
     isLoggedIn: (): Boolean => false,
 });
 
 type AuthProviderProps = {
-    children: React.ReactNode
-}
+    children: React.ReactNode;
+};
 
 export default function AuthProvider({ children }: AuthProviderProps) {
     const emptyUser: User = {} as User;
@@ -28,50 +28,46 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState(emptyUser);
 
     const login = async (user: User): Promise<Boolean> => {
-        const loginResponse = await AuthService.login(user);
-        return Boolean(loginResponse?.status);
+
+        if (!user.email || !user.password) {
+            return false
+        }
+
+        const loggedIn = Boolean((await AuthService.login(user)).isLoggedIn())
+        getUser()
+        return loggedIn;
     };
 
-    const logout = async () => {
-        await AuthService.logout();
-        setUser(emptyUser);
+    const logout = () => {
+        AuthService.logout().then(() => setUser(emptyUser));
     };
 
     const register = async (user: User): Promise<Boolean> => {
         return Boolean((await AuthService.register(user))?.email);
     };
 
-    const getUser = async (): Promise<User> => {
-        const exp = AuthService.getAuth()?.expires_at;
-
-        if (!exp) {
-            return {} as User;
-        }
-
-        if (new Date(exp) < new Date()) {
+    const getUser = (): User => {
+        if (AuthService.getAuth().expired()) {
             logout();
-            return {} as User;
+            setUser(emptyUser)
+            return emptyUser;
         }
 
         if (!user?.email) {
-            const authUser = await AuthService.getUser();
-
-            if (authUser && authUser.email) {
-                setUser(authUser);
-            } else {
-                logout();
-            }
+            AuthService.getUser().then((u) => {
+                if (u && u.email) {
+                    setUser(u);
+                } else {
+                    logout();
+                }
+            });
         }
+
         return user;
     };
 
     const isLoggedIn = () => {
-        const exp = AuthService.getAuth()?.expires_at;
-
-        if (!exp) {
-            return false;
-        }
-        return Boolean(new Date(exp) > new Date());
+        return AuthService.getAuth().isLoggedIn();
     };
 
     return (

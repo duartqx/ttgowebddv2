@@ -1,14 +1,15 @@
 import { LoginResponse } from "../domains/Auth";
+import AuthEntity from "../domains/AuthEntity";
 import { User } from "../domains/User";
-import HttpClient from "./client";
-import Service from "./service";
+import HttpClient from "./HttpClient";
+import Service from "./Service";
 
 export default class AuthService extends Service {
     static endpoint: string = "/api/users/";
     static loginEndpoint: string = "/api/users/login/";
     static logoutEndpoint: string = "/api/users/logout/";
 
-    public static async login(user: User): Promise<LoginResponse> {
+    public static async login(user: User): Promise<AuthEntity> {
         try {
             const res = await HttpClient().post(AuthService.loginEndpoint, {
                 email: user.email,
@@ -19,12 +20,13 @@ export default class AuthService extends Service {
 
             if (loginResponse && loginResponse.token) {
                 localStorage.setItem("auth", JSON.stringify(loginResponse));
+                await this.getUser()
             }
 
-            return loginResponse;
+            return new AuthEntity(loginResponse);
         } catch (e) {
             console.log(e);
-            return {} as LoginResponse;
+            return new AuthEntity({} as LoginResponse);
         }
     }
 
@@ -35,6 +37,7 @@ export default class AuthService extends Service {
             if (res.status >= 200 && res.status <= 299) {
                 localStorage.clear();
             }
+
             console.log("Logout");
         } catch (e) {
             console.log(e);
@@ -59,12 +62,18 @@ export default class AuthService extends Service {
 
         if (!user?.email) {
             try {
+
+                if (this.getAuth().expired()) {
+                    return {} as User;
+                }
+
                 const res = await HttpClient().get(AuthService.endpoint);
 
                 if (res.data?.email) {
                     user = res.data;
                     localStorage.setItem("user", JSON.stringify(user));
                 }
+
             } catch (e) {
                 console.log(e);
             }
@@ -73,7 +82,7 @@ export default class AuthService extends Service {
         return user;
     }
 
-    public static getAuth(): LoginResponse {
-        return JSON.parse(localStorage.getItem("auth") || "{}");
+    public static getAuth(): AuthEntity {
+        return new AuthEntity(JSON.parse(localStorage.getItem("auth") || "{}"))
     }
 }
