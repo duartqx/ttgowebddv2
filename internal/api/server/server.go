@@ -146,6 +146,13 @@ func (s *server) AddTaskRoutes() *server {
 		),
 	)
 
+	taskMux.Handle(
+		"GET /sprints/{$}",
+		s.jwtController.AuthenticatedMiddleware(
+			http.HandlerFunc(taskController.Sprints),
+		),
+	)
+
 	s.AddGroup("/api/tasks/", taskMux)
 
 	return s

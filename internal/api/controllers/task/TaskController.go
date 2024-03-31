@@ -130,3 +130,12 @@ func (tc TaskController) Filter(w http.ResponseWriter, r *http.Request) {
 
 	h.JsonResponse(w, http.StatusOK, tasks)
 }
+
+func (tc TaskController) Sprints(w http.ResponseWriter, r *http.Request) {
+	user := tc.sessionService.GetSessionUser(r.Context())
+	if user == nil {
+		http.Error(w, e.ForbiddenError.Error(), http.StatusForbidden)
+		return
+	}
+	h.JsonResponse(w, http.StatusOK, tc.taskService.GetSprints())
+}
