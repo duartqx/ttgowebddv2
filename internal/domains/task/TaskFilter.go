@@ -18,7 +18,7 @@ var CompletedStatus = completedStatus{
 
 type TaskFilter struct {
 	Tag       string    `json:"tag"`
-	Completed int       `json:"completed"`
+	Completed int       `json:"completed" validate:"gte=0;lte=2"`
 	Sprints   []int     `json:"sprints"`
 	StartAt   time.Time `json:"start_at"`
 	EndAt     time.Time `json:"end_at"`

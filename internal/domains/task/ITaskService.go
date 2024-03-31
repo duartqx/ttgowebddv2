@@ -5,5 +5,5 @@ type ITaskService interface {
 	Create(task *Task) error
 	Update(task *Task) error
 
-	GetSprints() *[]string
+	GetSprints() *[]int
 }

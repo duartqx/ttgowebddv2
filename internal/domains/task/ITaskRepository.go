@@ -8,5 +8,5 @@ type ITaskRepository interface {
 	FindById(task *Task) error
 	FindByTag(task *Task) error
 
-	GetSprints() *[]string
+	GetSprints() *[]int
 }
