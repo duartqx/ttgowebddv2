@@ -57,6 +57,6 @@ func (ts TaskService) Update(task *t.Task) error {
 	return nil
 }
 
-func (ts TaskService) GetSprints() *[]string {
+func (ts TaskService) GetSprints() *[]int {
 	return ts.taskRepository.GetSprints()
 }

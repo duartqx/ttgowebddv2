@@ -2,6 +2,7 @@ package task_test
 
 import (
 	"os"
+	"slices"
 	"testing"
 
 	"github.com/jmoiron/sqlx"
@@ -31,6 +32,30 @@ func TestMain(m *testing.M) {
 	code := m.Run()
 
 	os.Exit(code)
+}
+
+func TestSprints(t *testing.T) {
+	expectedLenght := 3
+	sprints := *taskService.GetSprints()
+
+	t.Logf("Got sprints: %v", sprints)
+
+	if len(sprints) != expectedLenght {
+		t.Fatalf(
+			"Sprints length does not matches, expects %d got %d",
+			expectedLenght,
+			len(sprints),
+		)
+	}
+
+	expectedResult := []int{81, 82, 83}
+	if slices.Compare(sprints, expectedResult) != 0 {
+		t.Fatalf(
+			"Sprints slice does not match, wants %v have %v",
+			expectedResult,
+			sprints,
+		)
+	}
 }
 
 func TestFilter(t *testing.T) {
@@ -180,5 +205,4 @@ func TestCreate(t *testing.T) {
 			}
 		})
 	}
-
 }
