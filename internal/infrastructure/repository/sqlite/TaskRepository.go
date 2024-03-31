@@ -42,6 +42,18 @@ func (tr TaskRepository) getJoinedQueryBuilder() *sqlb.SelectBuilder {
 		JoinWithOption(sqlb.LeftJoin, "users u", "u.id = t.user_id")
 }
 
+func (tr TaskRepository) zeroedHour(t time.Time) time.Time {
+	return time.Date(
+		t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location(),
+	)
+}
+
+func (tr TaskRepository) lastHour(t time.Time) time.Time {
+	return time.Date(
+		t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, t.Location(),
+	)
+}
+
 func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 
 	sb := tr.getJoinedQueryBuilder()
@@ -67,11 +79,23 @@ func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 	}
 
 	if !tf.GetStartAt().IsZero() {
-		sb.Where(sb.Between("t.start_at", tf.GetStartAt(), time.Now()))
+		sb.Where(
+			sb.Between(
+				"t.start_at",
+				tr.zeroedHour(tf.GetStartAt()),
+				tr.lastHour(tf.GetStartAt()),
+			),
+		)
 	}
 
 	if !tf.GetEndAt().IsZero() {
-		sb.Where(sb.Between("t.end_at", tf.GetEndAt(), time.Now()))
+		sb.Where(
+			sb.Between(
+				"t.end_at",
+				tr.zeroedHour(tf.GetEndAt()),
+				tr.lastHour(tf.GetEndAt()),
+			),
+		)
 	}
 
 	query, args := sb.Build()
@@ -195,9 +219,9 @@ func (tr TaskRepository) Create(task *t.Task) error {
 	return nil
 }
 
-func (tr TaskRepository) GetSprints() *[]string {
+func (tr TaskRepository) GetSprints() *[]int {
 
-	var sprints []string
+	var sprints []int
 
 	query, _ := sqlb.NewSelectBuilder().
 		Select("sprint").
