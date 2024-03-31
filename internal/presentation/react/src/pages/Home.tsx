@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../middleware/AuthContextProvider";
 import { Task, TaskFilter } from "../domains/Task";
 import TaskService from "../services/TaskService";
-import FilterTasks from "../components/FilterTasks";
+import FilterTasksForm from "../components/FilterTasksForm";
 
 export default function Home() {
     const { logout } = useContext(AuthContext);
@@ -17,7 +17,7 @@ export default function Home() {
     return (
         <>
             <div className="container mx-auto lg:w-2/5 md:w-3/5">
-                <FilterTasks setTaskFilter={setTaskFilter} />
+                <FilterTasksForm setTaskFilter={setTaskFilter} />
                 <div>
                     <table>
                         <thead>

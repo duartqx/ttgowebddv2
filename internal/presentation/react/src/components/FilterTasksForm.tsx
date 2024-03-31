@@ -9,7 +9,7 @@ type FilterTaskProps = {
     setTaskFilter: (tf: TaskFilter) => void;
 };
 
-export default function FilterTasks({ setTaskFilter }: FilterTaskProps) {
+export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
     const [completed, setCompleted] = useState(Completed.IGNORED);
     const [startAt, setStartAt] = useState("");
     const [endAt, setEndAt] = useState("");
@@ -21,7 +21,7 @@ export default function FilterTasks({ setTaskFilter }: FilterTaskProps) {
     }, []);
 
     const submitHandler = (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         setTaskFilter({
             completed: completed,
@@ -72,15 +72,15 @@ export default function FilterTasks({ setTaskFilter }: FilterTaskProps) {
                     {sprints.map((s) => (
                         <button
                             className={`
-                                        ${
-                                            sprintIsSelected(s)
-                                                ? "bg-neutral-950 border-indigo-800"
-                                                : "bg-neutral-800 border-gray-500"
-                                        }
-                                        m-1 shadow-md shadow-neutral-900
-                                        focus:outline-none hover:shadow-indigo-950
-                                        transition-all duration-500 ease-in-out
-                                        `}
+                                ${
+                                    sprintIsSelected(s)
+                                        ? "bg-neutral-950 border-indigo-800"
+                                        : "bg-neutral-800 border-gray-500"
+                                }
+                                m-1 shadow-md shadow-neutral-900
+                                focus:outline-none hover:shadow-indigo-950
+                                transition-all duration-500 ease-in-out
+                            `}
                             value={s.toString()}
                             key={`sprint__${s}`}
                             type="button"
