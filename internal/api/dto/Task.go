@@ -6,6 +6,7 @@ type TaskCreate struct {
 	Tag         string `json:"tag"`
 	Sprint      int    `json:"sprint"`
 	Description string `json:"description"`
+	Completed   bool   `json:"completed"`
 }
 
 type TaskUpdate struct {

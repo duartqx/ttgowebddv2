@@ -54,7 +54,8 @@ func (tc TaskController) Create(w http.ResponseWriter, r *http.Request) {
 		SetUser(user.ToUser()).
 		SetTag(taskDTO.Tag).
 		SetSprint(fmt.Sprintf("%d", taskDTO.Sprint)).
-		SetDescription(taskDTO.Description)
+		SetDescription(taskDTO.Description).
+		SetCompleted(task.Completed)
 
 	if err := tc.taskService.Create(task); err != nil {
 		h.ErrorResponse(w, err)
