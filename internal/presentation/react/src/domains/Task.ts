@@ -21,6 +21,7 @@ export type TaskCreate = {
     tag: String;
     sprint: Number;
     description: String;
+    completed: Boolean;
 };
 
 export type TaskFilter = {
