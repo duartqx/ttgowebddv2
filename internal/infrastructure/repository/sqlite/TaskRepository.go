@@ -100,7 +100,7 @@ func (tr TaskRepository) Filter(tf t.ITaskFilter) (*[]t.Task, error) {
 
 	query, args := sb.Build()
 
-	var tasks []t.Task
+	tasks := []t.Task{}
 	if err := tr.db.Select(&tasks, query, args...); err != nil {
 		return nil, err
 	}
@@ -221,7 +221,7 @@ func (tr TaskRepository) Create(task *t.Task) error {
 
 func (tr TaskRepository) GetSprints() *[]int {
 
-	var sprints []int
+	sprints := []int{}
 
 	query, _ := sqlb.NewSelectBuilder().
 		Select("sprint").
