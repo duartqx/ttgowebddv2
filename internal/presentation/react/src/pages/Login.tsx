@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../middleware/AuthContextProvider";
-import Input from "../components/Input";
-import DarkButton from "../components/DarkButton";
+import Input from "../components/elements/Input";
+import DarkButton from "../components/elements/DarkButton";
 
 export default function Login() {
     const navigate = useNavigate();

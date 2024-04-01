@@ -7,7 +7,23 @@ export default class TaskService extends Service {
     static filterEndpoint: string = "/api/tasks/filter/";
     static sprintsEndpoint: string = "/api/tasks/sprints/";
 
+    private static validate(t: Task | TaskCreate, update: Boolean = false) {
+        switch (true) {
+            case !Boolean(t.tag):
+                throw new Error("Tasks must have a Tag!");
+            case !Boolean(t.description):
+                throw new Error("Tasks must have a Description!");
+            case !Boolean(t.sprint):
+                throw new Error("Tasks must have a Sprint!");
+        }
+        if (update && !Boolean((t as Task).id)) {
+            throw new Error("Tasks must have an Id when updating!");
+        }
+    }
+
     public static async create(t: TaskCreate): Promise<Task | null> {
+        this.validate(t);
+
         try {
             const res = await HttpClient().post(TaskService.endpoint, t);
             const task: Task = res.data;
@@ -22,6 +38,8 @@ export default class TaskService extends Service {
     }
 
     public static async update(t: Task): Promise<Task | null> {
+        this.validate(t, true);
+
         try {
             const res = await HttpClient().patch(
                 this.getResourceEndpoint(t.id),

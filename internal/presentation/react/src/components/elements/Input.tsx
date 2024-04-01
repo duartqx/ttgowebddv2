@@ -4,16 +4,16 @@ type InputProps = {
     label: string;
     inputType: string;
     inputId: string;
+    onChangeHandler?: React.ChangeEventHandler;
     placeholder?: string;
-    onChangeHandler: React.ChangeEventHandler;
 };
 
 export default function Input({
     label,
     inputId,
     inputType,
-    placeholder,
     onChangeHandler,
+    placeholder,
 }: InputProps) {
     return (
         <div className="flex flex-col p-4 font-light">

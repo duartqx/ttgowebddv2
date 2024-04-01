@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
-import TaskService from "../services/TaskService";
-import Select from "./Select";
-import Input from "./Input";
-import DarkButton from "./DarkButton";
-import { Completed, TaskFilter } from "../domains/Task";
+import TaskService from "../../services/TaskService";
+import Select from "../elements/Select";
+import Input from "../elements/Input";
+import DarkButton from "../elements/DarkButton";
+import { Completed, TaskFilter } from "../../domains/Task";
 
 type FilterTaskProps = {
     setTaskFilter: (tf: TaskFilter) => void;
+};
+
+type SprintsState = {
+    [sprint: string]: Boolean;
 };
 
 export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
     const [completed, setCompleted] = useState(Completed.IGNORED);
     const [startAt, setStartAt] = useState("");
     const [endAt, setEndAt] = useState("");
-    const [sprints, setSprints] = useState([] as Number[]);
-    const [selectedSprints, setSelectedSprints] = useState([] as Number[]);
+    const [sprints, setSprints] = useState({} as SprintsState);
 
     useEffect(() => {
-        TaskService.sprints().then((s) => setSprints(s));
+        TaskService.sprints().then((s) =>
+            setSprints(
+                s.reduce((acc: SprintsState, curr: Number) => {
+                    acc[curr.valueOf()] = false;
+                    return acc;
+                }, {} as SprintsState)
+            )
+        );
     }, []);
 
     const submitHandler = (e: React.FormEvent) => {
@@ -27,7 +37,9 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
             completed: completed,
             start_at: startAt ? new Date(startAt) : undefined,
             end_at: endAt ? new Date(endAt) : undefined,
-            sprints: selectedSprints,
+            sprints: Object.entries(sprints)
+                .filter(([sprint, selected]) => selected)
+                .map(([sprint, selected]) => Number(sprint)),
         });
     };
 
@@ -46,16 +58,13 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
         },
     ];
 
-    const toggleSelectedSprint = (sprint: Number) => {
-        if (selectedSprints.includes(sprint)) {
-            setSelectedSprints(selectedSprints.filter((s) => s != sprint));
-        } else {
-            setSelectedSprints(selectedSprints.concat(sprint));
-        }
+    const toggleSelectedSprint = (sprint: string) => {
+        const sprintsCopy = { ...sprints };
+        sprintsCopy[sprint] = !Boolean(sprints[sprint]);
+        setSprints(sprintsCopy);
     };
 
-    const sprintIsSelected = (sprint: Number): Boolean =>
-        selectedSprints.includes(sprint);
+    const sprintIsSelected = (sprint: string): Boolean => sprints[sprint];
 
     return (
         <form onSubmit={submitHandler}>
@@ -68,8 +77,11 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
             </div>
             <div className="flex flex-col p-4">
                 <label className="font-light">Sprint</label>
-                <div className="self-center flex flex-wrap justify-center">
-                    {sprints.map((s) => (
+                <div className="
+                    self-center flex flex-wrap justify-center
+                    transform-all duration-500 ease-in-out
+                ">
+                    {Object.keys(sprints).map((s) => (
                         <button
                             className={`
                                 ${
@@ -111,7 +123,7 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
                     }
                 />
             </div>
-            <DarkButton label="Filter" />
+            <DarkButton label="Submit" />
         </form>
     );
 }

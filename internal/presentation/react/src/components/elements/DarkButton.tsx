@@ -10,7 +10,7 @@ export default function DarkButton({ label, type }: ButtonProps) {
                 type={type || "submit"}
                 className="
                     w-full transition-all duration-500 ease-in-out
-                    bg-gradient-to-br from-zinc-950 to-black
+                    bg-gradient-to-br from-zinc-950 to-black font-bold
                     hover:shadow-sm hover:shadow-indigo-900 hover:border-indigo-800
                 "
             >

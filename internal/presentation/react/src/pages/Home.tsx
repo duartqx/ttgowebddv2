@@ -1,23 +1,40 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../middleware/AuthContextProvider";
-import { Task, TaskFilter } from "../domains/Task";
+import { Task, TaskCreate, TaskFilter } from "../domains/Task";
 import TaskService from "../services/TaskService";
-import FilterTasksForm from "../components/FilterTasksForm";
+import ActionsForms from "../components/elements/ActionsForms";
 
 export default function Home() {
     const { logout } = useContext(AuthContext);
-
     const [taskFilter, setTaskFilter] = useState({} as TaskFilter);
     const [tasks, setTasks] = useState([] as Task[]);
+    const [newTask, setNewTask] = useState({} as TaskCreate);
+
+    // useEffect(() => {
+    //     TaskService.filter(taskFilter).then((tks) => setTasks(tks));
+    // }, [taskFilter]);
 
     useEffect(() => {
-        TaskService.filter(taskFilter).then((tks) => setTasks(tks));
-    }, [taskFilter]);
+        try {
+            if (newTask.tag && newTask.sprint && newTask.description) {
+                TaskService.create(newTask).then((task) => {
+                    if (task !== null) {
+                        setTasks(tasks.concat(task));
+                    }
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }, [newTask]);
 
     return (
         <>
             <div className="container mx-auto lg:w-2/5 md:w-3/5">
-                <FilterTasksForm setTaskFilter={setTaskFilter} />
+                <ActionsForms
+                    setTaskFilter={setTaskFilter}
+                    newTaskHandler={(t: TaskCreate) => setNewTask(t)}
+                />
                 <div>
                     <table>
                         <thead>
@@ -29,16 +46,14 @@ export default function Home() {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                tasks.map((t) => (
-                                    <tr>
-                                        <td>{t.tag}</td>
-                                        <td>{t.sprint}</td>
-                                        <td>{t.description}</td>
-                                        <td>{`${t.completed}`}</td>
-                                    </tr>
-                                ))
-                            }
+                            {tasks.map((t) => (
+                                <tr>
+                                    <td>{t.tag}</td>
+                                    <td>{t.sprint}</td>
+                                    <td>{t.description}</td>
+                                    <td>{`${t.completed}`}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
