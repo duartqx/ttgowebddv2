@@ -2,27 +2,24 @@ import React from "react";
 
 type InputProps = {
     label: string;
-    inputType: string;
-    inputId: string;
-    onChangeHandler?: React.ChangeEventHandler;
+    inputType?: string;
     placeholder?: string;
     isDisabled?: Boolean;
+    onChangeHandler?: React.ChangeEventHandler;
 };
 
 export default function Input({
     label,
-    inputId,
     inputType,
-    onChangeHandler,
     placeholder,
     isDisabled,
+    onChangeHandler,
 }: InputProps) {
     return (
         <div className="flex flex-col p-4 font-light">
-            <label htmlFor={inputId}>{label}</label>
+            <label>{label}</label>
             <input
-                id={inputId}
-                type={inputType}
+                type={inputType || "text"}
                 placeholder={placeholder || ""}
                 disabled={Boolean(isDisabled)}
                 onChange={onChangeHandler}

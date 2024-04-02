@@ -4,15 +4,13 @@ type Option = {
 };
 
 type SelectProps = {
-    id?: string;
     options: Option[];
     onChangeHandler?: React.ChangeEventHandler;
 };
 
-export default function Select({ id, options, onChangeHandler }: SelectProps) {
+export default function Select({ options, onChangeHandler }: SelectProps) {
     return (
         <select
-            id={id}
             onChange={onChangeHandler}
             className="
                 bg-zinc-900 rounded-md w-full

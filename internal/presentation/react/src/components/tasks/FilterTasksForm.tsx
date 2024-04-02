@@ -108,7 +108,6 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
                 <Input
                     inputType="date"
                     label="Start At"
-                    inputId="filter__start_at"
                     onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setStartAt(e.target.value)
                     }
@@ -117,7 +116,6 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
                 <Input
                     inputType="date"
                     label="End At"
-                    inputId="filter__end_at"
                     onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setEndAt(e.target.value)
                     }

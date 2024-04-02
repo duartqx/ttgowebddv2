@@ -48,8 +48,6 @@ export default function CreateTaskForm({
         <form onSubmit={submitHandler} autoComplete="off">
             <Input
                 label="Tag"
-                inputType="text"
-                inputId="create_task__tag"
                 onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setTag(e.target.value)
                 }
@@ -57,7 +55,6 @@ export default function CreateTaskForm({
             <Input
                 label="Sprint"
                 inputType="number"
-                inputId="create_task__sprint"
                 onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setSprint(Number(e.target.value))
                 }
@@ -65,7 +62,6 @@ export default function CreateTaskForm({
             <TextAreaInput
                 label="Description"
                 rows={4}
-                inputId="create_task__description"
                 onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setDescription(e.target.value)
                 }
@@ -73,7 +69,6 @@ export default function CreateTaskForm({
             <div className="p-4 font-light">
                 <label>Completed</label>
                 <Select
-                    id="create_task__completed"
                     onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setCompleted(Number(e.target.value))
                     }

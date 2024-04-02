@@ -3,21 +3,18 @@ import React from "react";
 type InputProps = {
     label: string;
     rows: number;
-    inputId: string;
     onChangeHandler?: React.ChangeEventHandler;
 };
 
 export default function TextAreaInput({
     label,
     rows,
-    inputId,
     onChangeHandler,
 }: InputProps) {
     return (
         <div className="flex flex-col p-4 font-light">
-            <label htmlFor={inputId}>{label}</label>
+            <label>{label}</label>
             <textarea
-                id={inputId}
                 rows={rows}
                 onChange={onChangeHandler}
                 className="

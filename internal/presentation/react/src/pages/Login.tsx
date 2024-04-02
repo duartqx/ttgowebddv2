@@ -46,7 +46,6 @@ export default function Login() {
             >
                 <Input
                     label="Email"
-                    inputId="login__email"
                     inputType="email"
                     placeholder="email@email.com"
                     isDisabled={isLoading}
@@ -56,8 +55,8 @@ export default function Login() {
                 />
                 <Input
                     label="Password"
-                    inputId="login__password"
                     inputType="password"
+                    placeholder="******"
                     isDisabled={isLoading}
                     onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setPassword(e.target.value)
