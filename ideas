@@ -1,2 +1,3 @@
-* Task: Add a 'details' attribute to function as a journal;
-* Task: Add a 'type' attribute (bug fixes, features, integrations, etc);
+* Task: Add 'details' attribute to serve as a journal;
+* Task: Add 'type' attribute (bug fixes, features, integrations, etc);
+* Task: Add 'company' attribute
