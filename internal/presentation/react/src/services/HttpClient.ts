@@ -1,39 +1,52 @@
 import axios, { AxiosInstance, HttpStatusCode } from "axios";
 
-const baseUrl = "http://127.0.0.1:8000";
+class HttpClientFacade {
+    private _baseUrl = "http://127.0.0.1:8000";
+    private _client: AxiosInstance;
+    private _token?: String;
 
-const client = axios.create({
-    baseURL: baseUrl,
-});
+    constructor() {
+        this._client = axios.create({
+            baseURL: this._baseUrl,
+        });
 
-client.interceptors.response.use(
-    (res) => res,
-    (error) => {
-        if (
-            error.response &&
-            error.response.status === HttpStatusCode.Unauthorized
-        ) {
-            localStorage.clear();
-        }
-        return Promise.reject(error);
+        this._client.interceptors.response.use(
+            (res) => res,
+            (error) => {
+                if (
+                    error.response &&
+                    error.response.status === HttpStatusCode.Unauthorized
+                ) {
+                    throw new Error("Unauthorized");
+                }
+                return Promise.reject(error);
+            }
+        );
     }
-);
 
-function getToken(): String {
-    const authData = JSON.parse(localStorage.getItem("auth") || "{}");
-    return authData?.token || "";
+    setToken() {
+        const authData = JSON.parse(localStorage.getItem("auth") || "{}");
+        this._token = authData?.token;
+        return this;
+    }
+
+    client(): AxiosInstance {
+        this._client.interceptors.request.use(
+            (config) => {
+                config.headers.Authorization = `Bearer ${this._token}`;
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        return this._client;
+    }
 }
 
-export default function HttpClient(): AxiosInstance {
-    client.interceptors.request.use(
-        (config) => {
-            config.headers.Authorization = `Bearer ${getToken()}`;
-            return config;
-        },
-        (error) => {
-            return Promise.reject(error);
-        }
-    );
+const facade = new HttpClientFacade();
 
-    return client;
+export default function HttpClient(): AxiosInstance {
+    return facade.setToken().client();
 }

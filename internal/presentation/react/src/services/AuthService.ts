@@ -20,7 +20,7 @@ export default class AuthService extends Service {
 
             if (loginResponse && loginResponse.token) {
                 localStorage.setItem("auth", JSON.stringify(loginResponse));
-                await this.getUser()
+                await this.getUser();
             }
 
             return new AuthEntity(loginResponse);
@@ -32,13 +32,9 @@ export default class AuthService extends Service {
 
     public static async logout(): Promise<void> {
         try {
-            const res = await HttpClient().delete(AuthService.logoutEndpoint);
-
-            if (res.status >= 200 && res.status <= 299) {
-                localStorage.clear();
-            }
-
-            console.log("Logout");
+            await HttpClient()
+                .delete(AuthService.logoutEndpoint)
+                .then(() => localStorage.clear());
         } catch (e) {
             console.log(e);
         }
@@ -62,7 +58,6 @@ export default class AuthService extends Service {
 
         if (!user?.email) {
             try {
-
                 if (this.getAuth().expired()) {
                     return {} as User;
                 }
@@ -73,7 +68,6 @@ export default class AuthService extends Service {
                     user = res.data;
                     localStorage.setItem("user", JSON.stringify(user));
                 }
-
             } catch (e) {
                 console.log(e);
             }
@@ -83,6 +77,6 @@ export default class AuthService extends Service {
     }
 
     public static getAuth(): AuthEntity {
-        return new AuthEntity(JSON.parse(localStorage.getItem("auth") || "{}"))
+        return new AuthEntity(JSON.parse(localStorage.getItem("auth") || "{}"));
     }
 }

@@ -8,11 +8,11 @@ export default function ActionsTabs({
     return (
         <div
             className={`
-                flex flex-around w-full bg-gradient-to-r rounded-b-md mt-4
+                flex flex-around w-full bg-gradient-to-r rounded-t-md
                 ${
                     which
-                        ? "from-neutral-900 to-neutral-800"
-                        : "from-neutral-800 to-neutral-900"
+                        ? "from-zinc-800 to-zinc-700"
+                        : "from-zinc-700 to-zinc-800"
                 }
             `}
         >

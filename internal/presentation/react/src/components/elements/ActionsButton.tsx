@@ -1,4 +1,4 @@
-import ChevronUp from "../../icons/ChevronUp";
+import ChevronUpIcon from "../../icons/ChevronUpIcon";
 
 export default function ActionsButton({
     active,
@@ -12,18 +12,18 @@ export default function ActionsButton({
             type="button"
             onClick={setActive}
             className="
-                fixed rounded-md border-gray-600 flex justify-center
-                left-1/2 bottom-4 w-[200px] -translate-x-[100px]
+                w-[140px] flex justify-center ml-[50%]
+                -translate-x-[70px] bg-transparent
             "
         >
-            <div className="font-light mr-2">Actions</div>
+            <div className="mr-2">Actions</div>
             <div
                 className={`
                     transform-all duration-200 ease-in-out
-                    ${active && "scale-y-[-1]"}
+                    ${!active && "scale-y-[-1]"}
                 `}
             >
-                <ChevronUp />
+                <ChevronUpIcon />
             </div>
         </button>
     );

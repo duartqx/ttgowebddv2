@@ -39,9 +39,9 @@ export default function Login() {
                 onSubmit={handleLogin}
                 autoComplete="off"
                 className="
-                    container m-auto h-[400px] w-[400px] p-6
+                    container m-auto h-[300px] w-[350px] p-6
                     flex flex-col justify-center z-10
-                    rounded-md bg-neutral-900 shadow-lg shadow-neutral-950
+                    rounded-md bg-zinc-900 shadow-lg shadow-zinc-950
                 "
             >
                 <Input
@@ -67,7 +67,7 @@ export default function Login() {
             <div
                 className="
             bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
-            from-transparent to-neutral-900 m-auto fixed h-screen w-screen
+            from-zinc-800 to-zinc-900 m-auto fixed h-screen w-screen
             "
             ></div>
         </>

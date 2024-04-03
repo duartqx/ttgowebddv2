@@ -15,7 +15,7 @@ export default function Tab({
                         hover:text-white hover:font-medium
                         ${
                             isSelected()
-                                ? "bg-neutral-900 rounded-b-md"
+                                ? "bg-zinc-800 rounded-t-md"
                                 : "font-light text-gray-400"
                         } 
                     `}

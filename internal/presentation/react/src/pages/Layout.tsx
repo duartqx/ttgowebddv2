@@ -6,8 +6,7 @@ export default function Layout() {
         <>
             <div
                 className="
-                flex items-start justify-center
-                px-16 w-screen h-screen bg-neutral-800
+                flex items-center justify-center w-screen max-w-[98vw]
             "
             >
                 <Outlet />

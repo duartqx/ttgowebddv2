@@ -1,4 +1,4 @@
-import LoadingSpinner from "../../icons/LoadingSpinner";
+import LoadingSpinnerIcon from "../../icons/LoadingSpinnerIcon";
 
 type ButtonProps = {
     label: string;
@@ -7,25 +7,25 @@ type ButtonProps = {
 };
 
 export default function DarkButton({ label, type, isLoading }: ButtonProps) {
-    const backgroundColors = isLoading
-        ? "hover:border-neutral-900 bg-neutral-900"
-        : `
-            hover:border-indigo-800 bg-gradient-to-br
-            from-neutral-950 to-black hover:shadow-indigo-900
-        `;
-
     return (
         <div className="flex justify-between items-center p-3 w-full">
             <button
                 disabled={Boolean(isLoading)}
                 type={type || "submit"}
                 className={`
+                    ${
+                        isLoading
+                            ? "hover:border-zinc-900 bg-zinc-900"
+                            : `hover:border-indigo-700 bg-gradient-to-br
+                               from-zinc-900 to-black hover:shadow-indigo-800
+                               hover:text-indigo-400
+                    `
+                    }
                     w-full transition-all duration-500 ease-in-out
-                    flex items-center justify-center font-bold hover:shadow-sm
-                    ${backgroundColors}
+                    flex items-center justify-center font-bold hover:shadow-md
                 `}
             >
-                {isLoading ? <LoadingSpinner /> : label}
+                {isLoading ? <LoadingSpinnerIcon /> : label}
             </button>
         </div>
     );

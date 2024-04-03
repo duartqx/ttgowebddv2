@@ -18,10 +18,11 @@ export default function Select({ options, onChangeHandler }: SelectProps) {
                 duration-500
                 ease-in-out 
                 focus:shadow-inner
-                focus:shadow-indigo-800
-                focus:border-indigo-800
-                hover:border-indigo-800
-                hover:ring-indigo-800
+                border-zinc-700
+                focus:shadow-indigo-700
+                focus:border-indigo-700
+                hover:border-indigo-700
+                hover:ring-indigo-700
             "
         >
             {options.map((o) => (

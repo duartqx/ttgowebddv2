@@ -24,15 +24,15 @@ export default function Input({
                 disabled={Boolean(isDisabled)}
                 onChange={onChangeHandler}
                 className={`
-                    rounded-md bg-zinc-900
+                    rounded-md bg-zinc-900 border-zinc-700
                     transition-all duration-500 ease-in-out w-full
                     ${
                         isDisabled
-                            ? "text-neutral-600"
+                            ? "text-zinc-800"
                             : `
-                            focus:shadow-inner focus:shadow-indigo-800
-                            focus:border-indigo-800 hover:border-indigo-800
-                            hover:ring-indigo-800
+                            focus:shadow-inner focus:shadow-indigo-700
+                            focus:border-indigo-700 hover:border-indigo-700
+                            hover:ring-indigo-700
                             `
                     }
                 `}

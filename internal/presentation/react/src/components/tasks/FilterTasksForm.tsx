@@ -4,6 +4,7 @@ import Select from "../elements/Select";
 import Input from "../elements/Input";
 import DarkButton from "../elements/DarkButton";
 import { Completed, TaskFilter } from "../../domains/Task";
+import SprintButton from "../elements/SprintButton";
 
 type FilterTaskProps = {
     setTaskFilter: (tf: TaskFilter) => void;
@@ -77,50 +78,37 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
             </div>
             <div className="flex flex-col p-4">
                 <label className="font-light">Sprint</label>
-                <div className="
+                <div
+                    className="
                     self-center flex flex-wrap justify-center
                     transform-all duration-500 ease-in-out
-                ">
+                "
+                >
                     {Object.keys(sprints).map((s) => (
-                        <button
-                            className={`
-                                ${
-                                    sprintIsSelected(s)
-                                        ? "bg-neutral-950 border-indigo-800"
-                                        : "bg-neutral-800 border-gray-500"
-                                }
-                                m-1 shadow-md shadow-neutral-900
-                                focus:outline-none hover:shadow-indigo-950
-                                transition-all duration-500 ease-in-out
-                            `}
-                            value={s.toString()}
+                        <SprintButton
                             key={`sprint__${s}`}
-                            type="button"
-                            onClick={() => toggleSelectedSprint(s)}
-                        >
-                            {s.toString()}
-                        </button>
+                            sprint={s}
+                            isSelected={sprintIsSelected(s)}
+                            toggleSelected={() => toggleSelectedSprint(s)}
+                        />
                     ))}
                 </div>
             </div>
+            <Input
+                inputType="date"
+                label="Start At"
+                onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setStartAt(e.target.value)
+                }
+            />
 
-            <div className="rounded-md bg-neutral-900">
-                <Input
-                    inputType="date"
-                    label="Start At"
-                    onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setStartAt(e.target.value)
-                    }
-                />
-
-                <Input
-                    inputType="date"
-                    label="End At"
-                    onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setEndAt(e.target.value)
-                    }
-                />
-            </div>
+            <Input
+                inputType="date"
+                label="End At"
+                onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEndAt(e.target.value)
+                }
+            />
             <DarkButton label="Submit" />
         </form>
     );
