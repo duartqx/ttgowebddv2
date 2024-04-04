@@ -8,13 +8,17 @@ import SprintButton from "../elements/SprintButton";
 
 type FilterTaskProps = {
     setTaskFilter: (tf: TaskFilter) => void;
+    dismissForm: () => void;
 };
 
 type SprintsState = {
     [sprint: string]: Boolean;
 };
 
-export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
+export default function FilterTasksForm({
+    setTaskFilter,
+    dismissForm,
+}: FilterTaskProps) {
     const [completed, setCompleted] = useState(Completed.IGNORED);
     const [startAt, setStartAt] = useState("");
     const [endAt, setEndAt] = useState("");
@@ -42,6 +46,8 @@ export default function FilterTasksForm({ setTaskFilter }: FilterTaskProps) {
                 .filter(([sprint, selected]) => selected)
                 .map(([sprint, selected]) => Number(sprint)),
         });
+
+        dismissForm();
     };
 
     const completedChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) =>

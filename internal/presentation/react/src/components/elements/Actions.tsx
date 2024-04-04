@@ -98,6 +98,7 @@ export default function Actions({
                             children={
                                 <FilterTasksForm
                                     setTaskFilter={setTaskFilter}
+                                    dismissForm={() => setFormsVisibile(false)}
                                 />
                             }
                         />
@@ -106,6 +107,7 @@ export default function Actions({
                             children={
                                 <CreateTaskForm
                                     setNewTaskHandler={newTaskHandler}
+                                    dismissForm={() => setFormsVisibile(false)}
                                 />
                             }
                         />

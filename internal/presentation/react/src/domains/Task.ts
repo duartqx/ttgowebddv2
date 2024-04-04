@@ -13,9 +13,20 @@ export type Task = {
     description: String;
     completed: Boolean;
     start_at: Date;
-    end_at: Date;
+    end_at?: Date;
     user: User;
 };
+
+export type ResponseTask = {
+    id: Number;
+    tag: String;
+    sprint: String;
+    description: String;
+    completed: Boolean;
+    start_at: string;
+    end_at?: string;
+    user: User;
+}
 
 export type TaskCreate = {
     tag: String;
@@ -30,4 +41,8 @@ export type TaskFilter = {
     sprints?: Number[];
     start_at?: Date;
     end_at?: Date;
+};
+
+export type TasksGroupedBySprint = {
+    [key: number]: Task[];
 };

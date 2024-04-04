@@ -55,7 +55,7 @@ func (tc TaskController) Create(w http.ResponseWriter, r *http.Request) {
 		SetTag(taskDTO.Tag).
 		SetSprint(fmt.Sprintf("%d", taskDTO.Sprint)).
 		SetDescription(taskDTO.Description).
-		SetCompleted(task.Completed)
+		SetCompleted(taskDTO.Completed)
 
 	if err := tc.taskService.Create(task); err != nil {
 		h.ErrorResponse(w, err)
@@ -98,7 +98,7 @@ func (tc TaskController) Update(w http.ResponseWriter, r *http.Request) {
 		SetEndAt(&taskDTO.EndAt).
 		SetCompleted(taskDTO.Completed)
 
-	if err := tc.taskService.Create(task); err != nil {
+	if err := tc.taskService.Update(task); err != nil {
 		h.ErrorResponse(w, err)
 		return
 	}

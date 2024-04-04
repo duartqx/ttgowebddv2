@@ -3,14 +3,15 @@ import { Outlet } from "react-router-dom";
 
 export default function Layout() {
     return (
-        <>
+        <div className="flex flex-col min-h-[100vh]">
             <div
-                className="
-                flex items-center justify-center w-screen max-w-[98vw]
-            "
+                className="flex justify-center items-center w-screen max-w-[98vw]"
             >
                 <Outlet />
             </div>
-        </>
+            <div className="p-8 font-light text-center cursor-default mt-auto">
+                ttgowebddv2 © {new Date().getFullYear()}
+            </div>
+        </div>
     );
 }

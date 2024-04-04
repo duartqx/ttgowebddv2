@@ -166,11 +166,18 @@ func (tr TaskRepository) FindByTag(task *t.Task) error {
 
 func (tr TaskRepository) Create(task *t.Task) error {
 
+	if task.GetCompleted() {
+		endAt := time.Now()
+		task.SetEndAt(&endAt)
+	}
+
 	args := []interface{}{
 		task.GetTag(),
 		task.GetSprint(),
 		task.GetDescription(),
+		task.GetCompleted(),
 		task.GetUserId(),
+		task.GetEndAt(),
 	}
 
 	tx, err := tr.db.Beginx()
@@ -182,8 +189,8 @@ func (tr TaskRepository) Create(task *t.Task) error {
 	if err := tx.Get(
 		&id,
 		`
-			INSERT INTO tasks (tag, sprint, description, user_id)
-			VALUES (?, ?, ?, ?)
+			INSERT INTO tasks (tag, sprint, description, completed, user_id, end_at)
+			VALUES (?, ?, ?, ?, ?, ?)
 			RETURNING id
 		`,
 		args...,

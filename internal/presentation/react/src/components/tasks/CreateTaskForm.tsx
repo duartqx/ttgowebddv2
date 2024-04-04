@@ -7,8 +7,10 @@ import DarkButton from "../elements/DarkButton";
 
 export default function CreateTaskForm({
     setNewTaskHandler,
+    dismissForm,
 }: {
     setNewTaskHandler: (t: TaskCreate) => void;
+    dismissForm: () => void;
 }) {
     const [tag, setTag] = useState("");
     const [sprint, setSprint] = useState(null as Number | null);
@@ -23,13 +25,15 @@ export default function CreateTaskForm({
                 tag,
                 sprint,
                 description,
-                completed: Boolean(completed),
+                completed: completed == Completed.COMPLETED,
             });
             setTag("");
             setSprint(null);
             setDescription("");
+            setCompleted(Completed.INCOMPLETED)
         }
 
+        dismissForm();
         e.currentTarget.reset();
     };
 

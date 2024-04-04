@@ -18,11 +18,11 @@ export default function DarkButton({ label, type, isLoading }: ButtonProps) {
                             ? "hover:border-zinc-900 bg-zinc-900"
                             : `hover:border-indigo-700 bg-gradient-to-br
                                from-zinc-900 to-black hover:shadow-indigo-800
-                               hover:text-indigo-400
+                               hover:text-indigo-400 hover:shadow-md
                     `
                     }
                     w-full transition-all duration-500 ease-in-out
-                    flex items-center justify-center font-bold hover:shadow-md
+                    flex items-center justify-center font-bold
                 `}
             >
                 {isLoading ? <LoadingSpinnerIcon /> : label}

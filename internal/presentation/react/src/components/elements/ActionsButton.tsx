@@ -13,7 +13,7 @@ export default function ActionsButton({
             onClick={setActive}
             className="
                 w-[140px] flex justify-center ml-[50%]
-                -translate-x-[70px] bg-transparent
+                -translate-x-[70px] bg-transparent focus:outline-none
             "
         >
             <div className="mr-2">Actions</div>
