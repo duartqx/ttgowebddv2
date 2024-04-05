@@ -34,7 +34,7 @@ export default function Login() {
     };
 
     return (
-        <>
+        <div className="flex flex-grow mx-auto my-auto h-[90vh] w-screen">
             <form
                 onSubmit={handleLogin}
                 autoComplete="off"
@@ -70,6 +70,6 @@ export default function Login() {
             from-zinc-800 to-zinc-900 m-auto fixed h-screen w-screen
             "
             ></div>
-        </>
+        </div>
     );
 }

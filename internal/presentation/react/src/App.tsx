@@ -8,6 +8,7 @@ import PrivateRouter from "./middleware/PrivateRouter";
 import Layout from "./pages/Layout";
 import { Paths } from "./paths";
 import Home from "./pages/Home";
+import SprintsProvider from "./middleware/SprintsContextProvider";
 
 function App() {
     const router = createBrowserRouter([
@@ -21,7 +22,7 @@ function App() {
             children: [
                 {
                     index: true,
-                    element: (<Home />),
+                    element: <Home />,
                 },
             ],
         },
@@ -38,7 +39,9 @@ function App() {
     return (
         <>
             <AuthProvider>
-                <RouterProvider router={router} />
+                <SprintsProvider>
+                    <RouterProvider router={router} />
+                </SprintsProvider>
             </AuthProvider>
         </>
     );

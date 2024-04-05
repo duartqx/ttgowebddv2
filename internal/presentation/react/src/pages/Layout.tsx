@@ -9,7 +9,7 @@ export default function Layout() {
             >
                 <Outlet />
             </div>
-            <div className="p-8 font-light text-center cursor-default mt-auto">
+            <div className="z-10 p-8 font-light text-center cursor-default mt-auto">
                 ttgowebddv2 © {new Date().getFullYear()}
             </div>
         </div>

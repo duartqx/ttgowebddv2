@@ -16,9 +16,9 @@ export default function CompletedButton({
 }: CompletedButtonProps) {
     const [isHovered, setIsHovered] = useState(false);
     const handlers = {
-        onClickHandler: updateHandler,
-        onMouseEnterHandler: () => setIsHovered(true),
-        onMouseLeaveHandler: () => setIsHovered(false),
+        onClick: updateHandler,
+        onMouseEnter: () => setIsHovered(true),
+        onMouseLeave: () => setIsHovered(false),
     };
 
     return (
@@ -30,7 +30,7 @@ export default function CompletedButton({
                         task.end_at && task.end_at
                     } to now`}
                     children={isHovered ? <RedoIcon /> : <CheckCircle />}
-                    {...handlers}
+                    handlers={handlers}
                 />
             ) : (
                 <InfoButton
@@ -39,7 +39,7 @@ export default function CompletedButton({
                     children={
                         isHovered ? <RedoIcon /> : <ExclamationCircleIcon />
                     }
-                    {...handlers}
+                    handlers={handlers}
                 />
             )}
         </div>

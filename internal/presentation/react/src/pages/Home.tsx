@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Task,
     TaskCreate,
@@ -8,11 +8,15 @@ import {
 import TaskService from "../services/TaskService";
 import Actions from "../components/elements/Actions";
 import TaskCardsGroupedBySprints from "../components/tasks/card/TasksGroupedBySprint";
+import { SprintsContext } from "../middleware/SprintsContextProvider";
 
 export default function Home() {
     const [taskFilter, setTaskFilter] = useState({} as TaskFilter);
     const [tasks, setTasks] = useState([] as TasksGroupedBySprint);
     const [newTask, setNewTask] = useState({} as TaskCreate);
+    const { setToSprints, pullSprintsTrigger } = useContext(SprintsContext);
+
+    useEffect(() => pullSprintsTrigger(), []);
 
     useEffect(() => {
         TaskService.filter(taskFilter).then((tks) => setTasks(tks));
@@ -52,8 +56,9 @@ export default function Home() {
                 TaskService.create(newTask).then((task) => {
                     if (task !== null) {
                         setTaskHandler(task);
+                        setToSprints(task?.sprint?.valueOf());
                     }
-                    setNewTask({} as TaskCreate)
+                    setNewTask({} as TaskCreate);
                 });
             }
         } catch (e) {

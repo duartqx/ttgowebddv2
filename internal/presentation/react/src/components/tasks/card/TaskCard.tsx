@@ -20,8 +20,8 @@ export default function TaskCard({ task, updateHandler }: TaskCardProps) {
             <div className="flex justify-between gap-2">
                 <div
                     className="
-                        px-4 rounded-md border-zinc-200
-                        bg-zinc-100 text-indigo-400 flex h-[80%] w-[120px]
+                        px-4 py-1 rounded-md border-zinc-200
+                        bg-zinc-100 text-indigo-400 flex w-[120px]
                         justify-center items-center cursor-default
                     "
                     title={task.tag.valueOf()}

@@ -19,7 +19,7 @@ export default function ActionsButton({
             <div className="mr-2">Actions</div>
             <div
                 className={`
-                    transform-all duration-200 ease-in-out
+                    transform-all duration-200 ease-in-out h-6
                     ${!active && "scale-y-[-1]"}
                 `}
             >

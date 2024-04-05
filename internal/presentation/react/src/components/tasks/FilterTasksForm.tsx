@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import TaskService from "../../services/TaskService";
 import Select from "../elements/Select";
 import Input from "../elements/Input";
 import DarkButton from "../elements/DarkButton";
 import { Completed, TaskFilter } from "../../domains/Task";
 import SprintButton from "../elements/SprintButton";
+import { SprintsContext } from "../../middleware/SprintsContextProvider";
 
 type FilterTaskProps = {
     setTaskFilter: (tf: TaskFilter) => void;
@@ -22,18 +23,12 @@ export default function FilterTasksForm({
     const [completed, setCompleted] = useState(Completed.IGNORED);
     const [startAt, setStartAt] = useState("");
     const [endAt, setEndAt] = useState("");
-    const [sprints, setSprints] = useState({} as SprintsState);
-
-    useEffect(() => {
-        TaskService.sprints().then((s) =>
-            setSprints(
-                s.reduce((acc: SprintsState, curr: Number) => {
-                    acc[curr.valueOf()] = false;
-                    return acc;
-                }, {} as SprintsState)
-            )
-        );
-    }, []);
+    const {
+        getSprints,
+        getSelectedSprints,
+        toggleSelectedSprint,
+        sprintIsSelected,
+    } = useContext(SprintsContext);
 
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,9 +37,7 @@ export default function FilterTasksForm({
             completed: completed,
             start_at: startAt ? new Date(startAt) : undefined,
             end_at: endAt ? new Date(endAt) : undefined,
-            sprints: Object.entries(sprints)
-                .filter(([sprint, selected]) => selected)
-                .map(([sprint, selected]) => Number(sprint)),
+            sprints: getSelectedSprints(),
         });
 
         dismissForm();
@@ -65,14 +58,6 @@ export default function FilterTasksForm({
         },
     ];
 
-    const toggleSelectedSprint = (sprint: string) => {
-        const sprintsCopy = { ...sprints };
-        sprintsCopy[sprint] = !Boolean(sprints[sprint]);
-        setSprints(sprintsCopy);
-    };
-
-    const sprintIsSelected = (sprint: string): Boolean => sprints[sprint];
-
     return (
         <form onSubmit={submitHandler}>
             <div className="flex-flex-col p-4">
@@ -90,7 +75,7 @@ export default function FilterTasksForm({
                     transform-all duration-500 ease-in-out
                 "
                 >
-                    {Object.keys(sprints).map((s) => (
+                    {Object.keys(getSprints()).map((s) => (
                         <SprintButton
                             key={`sprint__${s}`}
                             sprint={s}

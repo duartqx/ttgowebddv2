@@ -25,7 +25,7 @@ export default function DarkButton({ label, type, isLoading }: ButtonProps) {
                     flex items-center justify-center font-bold
                 `}
             >
-                {isLoading ? <LoadingSpinnerIcon /> : label}
+                {isLoading ? <div className="h-6"><LoadingSpinnerIcon /></div> : label}
             </button>
         </div>
     );
