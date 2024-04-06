@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"embed"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +15,9 @@ import (
 	"github.com/duartqx/ttgowebddv2/internal/api/server"
 	"github.com/duartqx/ttgowebddv2/internal/infrastructure/repository"
 )
+
+//go:embed internal/presentation/react/dist/*
+var assets embed.FS
 
 type env struct {
 	dbStr  string `validate:"required"`
@@ -42,6 +46,7 @@ func GetServer(db *sqlx.DB, secret string) http.Handler {
 			UserRepository:    getUserRepository(db),
 			SessionRepository: repository.GetSessionRepository(),
 			TaskRepository:    getTaskRepository(db),
+			AssetsFS:          assets,
 		}).
 		Build()
 }

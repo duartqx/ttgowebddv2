@@ -1,7 +1,10 @@
 package server
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
+	"log"
 	"net/http"
 	"strings"
 
@@ -30,6 +33,7 @@ type ServerConfig struct {
 	UserRepository    u.IUserRepository
 	SessionRepository a.ISessionRepository
 	TaskRepository    t.ITaskRepository
+	AssetsFS          embed.FS
 }
 
 type server struct {
@@ -37,7 +41,8 @@ type server struct {
 	jwtSecret []byte
 	cors      bool
 
-	mux *http.ServeMux
+	mux      *http.ServeMux
+	assetsFS embed.FS
 
 	userRepository    u.IUserRepository
 	sessionRepository a.ISessionRepository
@@ -58,7 +63,8 @@ func NewServer(config *ServerConfig) *server {
 		jwtSecret: config.JwtSecret,
 		cors:      config.Cors,
 
-		mux: http.NewServeMux(),
+		mux:      http.NewServeMux(),
+		assetsFS: config.AssetsFS,
 
 		userRepository:    config.UserRepository,
 		sessionRepository: config.SessionRepository,
@@ -158,6 +164,33 @@ func (s *server) AddTaskRoutes() *server {
 	return s
 }
 
+func (s *server) AddAssets() *server {
+
+	// embed.FS unwrap
+	assets, err := fs.Sub(s.assetsFS, "internal/presentation/react/dist")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// middleware to handle client side routing and always responds with index
+	indexMiddleware := func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+			if !strings.Contains(r.URL.Path, "/assets/") {
+				r.URL.Path = "/"
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+
+	// http FileServer wrapped with client side routing middleware
+	fs := http.StripPrefix("/", http.FileServer(http.FS(assets)))
+	s.mux.Handle("/", indexMiddleware(fs))
+
+	return s
+}
+
 func (s server) Use(
 	mux http.Handler, middlewares ...func(http.Handler) http.Handler,
 ) http.Handler {
@@ -182,7 +215,7 @@ func (s *server) AddGroup(pattern string, handler http.Handler) error {
 
 func (s *server) Build() http.Handler {
 
-	s.AddBaseUserRoutes().AddTaskRoutes()
+	s.AddBaseUserRoutes().AddTaskRoutes().AddAssets()
 
 	mux := http.Handler(s.mux)
 

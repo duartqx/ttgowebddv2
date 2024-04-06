@@ -1,4 +1,5 @@
 .env
 vendor
 cmd/main
+main
 *.http
