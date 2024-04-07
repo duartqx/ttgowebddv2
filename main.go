@@ -23,6 +23,7 @@ type env struct {
 	dbStr  string `validate:"required"`
 	secret string `validate:"required"`
 	addr   string `validate:"required"`
+	debug  bool
 }
 
 func GetEnv() *env {
@@ -30,6 +31,7 @@ func GetEnv() *env {
 		dbStr:  os.Getenv("CONNECTION_STR"),
 		secret: os.Getenv("SECRET"),
 		addr:   os.Getenv("SERVER_ADDR"),
+		debug:  os.Getenv("DEBUG") == "1",
 	}
 	if errs := validator.New().Struct(e); errs != nil {
 		log.Fatalln(errs)
@@ -37,12 +39,12 @@ func GetEnv() *env {
 	return e
 }
 
-func GetServer(db *sqlx.DB, secret string) http.Handler {
+func GetServer(db *sqlx.DB, env *env) http.Handler {
 	return server.
 		NewServer(&server.ServerConfig{
 			Db:                db,
-			JwtSecret:         []byte(secret),
-			Cors:              true,
+			JwtSecret:         []byte(env.secret),
+			Cors:              env.debug,
 			UserRepository:    getUserRepository(db),
 			SessionRepository: repository.GetSessionRepository(),
 			TaskRepository:    getTaskRepository(db),
@@ -58,7 +60,7 @@ func main() {
 	db := initDB(env.dbStr) // Defined at compile time
 	defer db.Close()
 
-	mux := GetServer(db, env.secret)
+	mux := GetServer(db, env)
 
 	srv := &http.Server{
 		Handler:      mux,
