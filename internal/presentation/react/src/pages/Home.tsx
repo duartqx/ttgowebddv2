@@ -9,17 +9,51 @@ import TaskService from "../services/TaskService";
 import Actions from "../components/elements/Actions";
 import TaskCardsGroupedBySprints from "../components/tasks/card/TasksGroupedBySprint";
 import { SprintsContext } from "../middleware/SprintsContextProvider";
+import LoadingSpinnerIcon from "../icons/LoadingSpinnerIcon";
+
+function TaskList({
+    tasksGroupedBySprint,
+    updateHandler,
+}: {
+    tasksGroupedBySprint: TasksGroupedBySprint;
+    updateHandler: (task: Task) => () => void;
+}) {
+    return Object.entries(tasksGroupedBySprint).map(([sprint, tasks]) => {
+        return (
+            <div
+                key={`${sprint}__task__cards`}
+                className="
+                    flex flex-col rounded-md border-2 border-zinc-950 my-4
+                    shadow-md shadow-zinc-950 bg-opacity-5 bg-zinc-950
+                "
+            >
+                <TaskCardsGroupedBySprints
+                    sprint={sprint.toString()}
+                    updateHandler={updateHandler}
+                    tasks={tasks}
+                />
+            </div>
+        );
+    });
+}
 
 export default function Home() {
     const [taskFilter, setTaskFilter] = useState({} as TaskFilter);
     const [tasks, setTasks] = useState([] as TasksGroupedBySprint);
     const [newTask, setNewTask] = useState({} as TaskCreate);
+    const [isLoading, setIsLoading] = useState(true);
     const { setToSprints, pullSprintsTrigger } = useContext(SprintsContext);
 
     useEffect(() => pullSprintsTrigger(), []);
 
     useEffect(() => {
-        TaskService.filter(taskFilter).then((tks) => setTasks(tks));
+        setIsLoading(true);
+
+        TaskService.filter(taskFilter).then((tasksGroupedBySprint) => {
+            setTasks(tasksGroupedBySprint);
+            setIsLoading(false);
+        });
+
     }, [taskFilter]);
 
     const setTaskHandler = (task: Task) => {
@@ -73,23 +107,19 @@ export default function Home() {
                 newTaskHandler={(t: TaskCreate) => setNewTask(t)}
             />
             <div className="w-[80vw] flex flex-col justify-center pt-24">
-                {Object.entries(tasks).map(([sprint, tasks]) => {
-                    return (
-                        <div
-                            key={`${sprint}__task__cards`}
-                            className="
-                                flex flex-col rounded-md border-2 border-zinc-950 my-4
-                                shadow-md shadow-zinc-950 bg-opacity-5 bg-zinc-950
-                            "
-                        >
-                            <TaskCardsGroupedBySprints
-                                sprint={sprint.toString()}
-                                updateHandler={updateHandler}
-                                tasks={tasks}
-                            />
-                        </div>
-                    );
-                })}
+                {isLoading ? (
+                    <div className="
+                        h-8 w-8 fixed top-[50%] left-[50%]
+                        -translate-x-[1rem] -translate-y-[1rem]
+                    ">
+                        <LoadingSpinnerIcon />
+                    </div>
+                ) : (
+                    <TaskList
+                        tasksGroupedBySprint={tasks}
+                        updateHandler={updateHandler}
+                    />
+                )}
             </div>
         </>
     );

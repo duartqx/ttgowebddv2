@@ -5,7 +5,7 @@ export default function Layout() {
     return (
         <div className="flex flex-col min-h-[100vh]">
             <div
-                className="flex justify-center items-center w-screen max-w-[98vw]"
+                className="flex justify-center items-center w-screen max-w-[97vw]"
             >
                 <Outlet />
             </div>

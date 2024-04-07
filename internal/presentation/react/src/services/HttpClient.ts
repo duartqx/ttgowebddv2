@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, HttpStatusCode } from "axios";
 
 class HttpClientFacade {
-    private _baseUrl = "http://0.0.0.0:8888";
+    private _baseUrl = this.getBaseURL();
     private _client: AxiosInstance;
     private _token?: String;
 
@@ -22,6 +22,12 @@ class HttpClientFacade {
                 return Promise.reject(error);
             }
         );
+    }
+
+    private getBaseURL() {
+        return import.meta.env.VITE_DEBUG == "1"
+            ? import.meta.env.VITE_DEV_BASE_API_URL
+            : import.meta.env.VITE_PROD_BASE_API_URL;
     }
 
     setToken() {
