@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, HttpStatusCode } from "axios";
 
 class HttpClientFacade {
-    private _baseUrl = "http://127.0.0.1:8000";
+    private _baseUrl = "http://0.0.0.0:8888";
     private _client: AxiosInstance;
     private _token?: String;
 
