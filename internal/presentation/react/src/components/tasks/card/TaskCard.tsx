@@ -17,7 +17,7 @@ function TaskDescription({
 }) {
     return (
         <div
-            className={`"text-wrap font-light p-4 cursor-pointer ${
+            className={`"text-wrap p-4 cursor-pointer ${
                 !ignoreVisibility && "hidden sm:block"
             }`}
             title={description.valueOf()}
@@ -33,7 +33,7 @@ export default function TaskCard({ task, updateHandler }: TaskCardProps) {
     return (
         <div
             className="
-                rounded-lg border-2 border-zinc-800  flex flex-col
+                rounded-lg border-2 border-zinc-800 flex flex-col
                 hover:border-indigo-500 bg-zinc-800
                 shadow-md shadow-zinc-950 break-all p-3 sm:h-[60px] h-[160px]
             "
@@ -43,7 +43,7 @@ export default function TaskCard({ task, updateHandler }: TaskCardProps) {
                     <div
                         className="
                         px-4 py-1 rounded-md border-zinc-200
-                        bg-zinc-100 text-indigo-400 flex w-[120px]
+                        bg-zinc-900 text-indigo-400 flex w-[120px]
                         justify-center items-center cursor-default
                     "
                         title={task.tag.valueOf()}

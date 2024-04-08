@@ -18,13 +18,13 @@ export default function TaskCardsGroupedBySprints({
             <div
                 className={`
                     bg-indigo-300 text-center cursor-pointer
-                    text-indigo-500 p-3 text-xl
-                    flex gap-2 px-12 items-center rounded-t-md
+                    text-indigo-800 p-3 text-xl flex justify-between
+                    px-12 items-center rounded-t-md
                 `}
                 title={`Sprint ${sprint} with ${tasks.length} tasks.`}
             >
-                <div className="font-bold">{sprint}</div>
-                <div className="text-sm">({tasks.length})</div>
+                <div className="font-bold">Sprint: {sprint}</div>
+                <div className="">Tasks: {tasks.length}</div>
             </div>
             <div className="p-4 flex flex-col gap-4">
                 {tasks.map((t) => (
